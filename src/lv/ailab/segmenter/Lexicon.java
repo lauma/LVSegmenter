@@ -20,7 +20,7 @@ public class Lexicon
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
         String line = in.readLine();
-        int count = 1;
+        int count = 0;
         while (line != null)
         {
             String[] parts = line.split("\t");
@@ -34,8 +34,8 @@ public class Lexicon
                 l.data.put(e.transliterated, e.lemma);
             }
             if (count % 1000 == 0) System.out.print(count + " loaded.\r");
+            count++;
             line = in.readLine();
-            count ++;
         }
         in.close();
         System.out.println(count + " loaded. Done.");

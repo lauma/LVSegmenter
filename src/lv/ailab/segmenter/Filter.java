@@ -70,10 +70,11 @@ public class Filter
         BufferedWriter out = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
         String readLine = in.readLine();
-        int countAll = 1;
+        int countAll = 0;
         int countGood = 0;
         while (readLine != null)
         {
+            countAll++;
             String[] parts = readLine.split("\t");
             if (isAccepted(parts[0]))
             {
@@ -83,7 +84,6 @@ public class Filter
             }
             if (countAll % 1000 == 0) System.out.print(countAll + " processed. " + countGood + " good.\r");
             readLine = in.readLine();
-            countAll++;
         }
         System.out.println(countAll + " processed. " + countGood + " good. Done.");
         in.close();

@@ -1,6 +1,6 @@
 package lv.ailab.segmenter;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
@@ -76,6 +76,37 @@ public class Segmenter
     }
 
     /**
+     * Segments each line in given file and prints out as JSON.
+     * @param inFile path to data file
+     * @param outFile path to result file
+     */
+    public void segmentFile(String inFile, String outFile)
+    throws IOException
+    {
+        System.out.println("Segmenting file...");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(inFile), "UTF-8"));
+        BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
+        String readLine = in.readLine();
+        out.append("[\n");
+        int count = 0;
+        while (readLine != null)
+        {
+            count++;
+            out.append(segment(readLine).toJSON());
+            if (count % 1000 == 0) System.out.print(count + " processed.\r");
+            readLine = in.readLine();
+            if (readLine != null) out.append(",\n");
+        }
+        out.append("\n]");
+        System.out.println(count + " processed. Done.");
+        in.close();
+        out.flush();
+        out.close();
+    }
+
+    /**
      * Object for representing Segmenter's results.
      */
     public static class Results
@@ -118,10 +149,12 @@ public class Segmenter
                     res.append(word);
                     res.append("\", ");
                 }
-                res.delete(res.length()-2, res.length());
+                if (res.toString().endsWith(", "))
+                    res.delete(res.length()-2, res.length());
                 res.append("],");
             }
-            res.delete(res.length()-1, res.length());
+            if (res.toString().endsWith(","))
+                res.delete(res.length()-1, res.length());
             res.append("],\n\t\"FoundWords\":[");
             for (String word : foundWords)
             {
@@ -129,7 +162,8 @@ public class Segmenter
                 res.append(word);
                 res.append("\", ");
             }
-            res.delete(res.length()-2, res.length());
+            if (res.toString().endsWith(", "))
+                res.delete(res.length()-2, res.length());
             res.append("]\n}");
             return res.toString();
         }
