@@ -10,13 +10,17 @@ import java.io.*;
  */
 public class Lexicon
 {
-    public PatriciaTrie<Entry> data = new PatriciaTrie<>();
+    public PatriciaTrie<String> data = new PatriciaTrie<>();
 
-    public void loadFromFile(String wordListFile)
+    public static Lexicon loadFromFile(String wordListFile)
     throws IOException
     {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
+        Lexicon l = new Lexicon();
+        System.out.println("Loading wordlist...");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
         String line = in.readLine();
+        int count = 1;
         while (line != null)
         {
             String[] parts = line.split("\t");
@@ -25,13 +29,17 @@ public class Lexicon
             else
             {
                 Entry e = new Entry (parts[0], parts[1]);
-                data.put(e.form, e);
-                data.put(e.lemma, e);
-                data.put(e.noDiacritics, e);
-                data.put(e.transliterated, e);
+                l.data.put(e.form, e.lemma);
+                l.data.put(e.noDiacritics, e.lemma);
+                l.data.put(e.transliterated, e.lemma);
             }
+            if (count % 1000 == 0) System.out.print(count + " loaded.\r");
+            line = in.readLine();
+            count ++;
         }
         in.close();
+        System.out.println(count + " loaded. Done.");
+        return l;
     }
 
     /**
