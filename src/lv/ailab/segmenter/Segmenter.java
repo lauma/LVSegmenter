@@ -2,6 +2,7 @@ package lv.ailab.segmenter;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,7 @@ public class Segmenter
         ArrayList<ArrayList<ArrayList<String>>> memorizedWords = new ArrayList<>(s.length());
         // in case overall segmentation is not successful, any reasonable
         // substring might be usefull
-        HashSet<String> foundWords = new HashSet<>();
+        HashMap<String, Lexicon.Entry> foundWords = new HashMap<>();
         for (int i = 0; i < s.length() + 1; i++)
         {
             dynamicTable.add(false);
@@ -52,10 +53,13 @@ public class Segmenter
                 if (dynamicTable.get(begin))
                 {
                     String potWord = s.substring(begin, end);
-                    if (lexicon.data.containsKey(potWord) || validSegment.matcher(potWord).matches())
+                    Lexicon.Entry found = lexicon.data.get(potWord);
+                    if (found == null && validSegment.matcher(potWord).matches())
+                        found = new Lexicon.Entry(potWord, "regexp");
+                    if (found != null)
                     {
                         dynamicTable.set(end, true);
-                        foundWords.add(potWord);
+                        foundWords.put(potWord, found);
                         if (memorizedWords.get(begin).isEmpty())
                         {
                             ArrayList<String> newVariant = new ArrayList<>();
@@ -123,11 +127,11 @@ public class Segmenter
          * All valid "words" (accepted as word by lexicon or regexp) that are
          * found given string.
          */
-        public HashSet<String> foundWords;
+        public HashMap<String, Lexicon.Entry> foundWords;
 
         public Results (String original,
                 ArrayList<ArrayList<String>> segmentations,
-                HashSet<String> foundWords)
+                HashMap<String, Lexicon.Entry> foundWords)
         {
             this.original = original;
             this.segmentations = segmentations;
@@ -156,14 +160,19 @@ public class Segmenter
             if (res.toString().endsWith(","))
                 res.delete(res.length()-1, res.length());
             res.append("],\n\t\"FoundWords\":[");
-            for (String word : foundWords)
+            for (String word : foundWords.keySet())
             {
-                res.append("\"");
+                res.append("\n\t\t\"");
                 res.append(word);
-                res.append("\", ");
+                res.append("\":{\"Lemma\":\"");
+                Lexicon.Entry info = foundWords.get(word);
+                res.append(info.lemma);
+                res.append("\", \"Source\":\"");
+                res.append(info.lang);
+                res.append("\"},");
             }
-            if (res.toString().endsWith(", "))
-                res.delete(res.length()-2, res.length());
+            if (res.toString().endsWith(","))
+                res.delete(res.length()-1, res.length());
             res.append("]\n}");
             return res.toString();
         }

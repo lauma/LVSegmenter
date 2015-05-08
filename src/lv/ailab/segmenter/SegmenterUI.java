@@ -5,13 +5,14 @@ import java.io.IOException;
 
 public class SegmenterUI
 {
-    public static String WORDLIST_FILE = "wordlist-filtered.txt";
+    public static String WORDLIST_FILE_LV = "wordlist-filtered.txt";
+    public static String WORDLIST_FILE_EN="google-10000-filtered-english.txt";
     //public Segmenter segmenter;
 
    // public SegmenterUI()
     //throws IOException
     //{
-    //    segmenter = new Segmenter (Lexicon.loadFromFile(WORDLIST_FILE));
+    //    segmenter = new Segmenter (Lexicon.loadFromFile(WORDLIST_FILE_LV));
     //}
 
     public static void main(String[] args)
@@ -19,15 +20,21 @@ public class SegmenterUI
     {
         if(args.length == 1)
         {
-            Segmenter s = new Segmenter (Lexicon.loadFromFile(WORDLIST_FILE));
+            Lexicon l = new Lexicon();
+            l.addFromFile(WORDLIST_FILE_LV, "lv");
+            l.addFromFile(WORDLIST_FILE_EN, "en");
+            Segmenter s = new Segmenter (l);
             System.out.println(s.segment(args[0]).toJSON());
-        } else if (args.length == 4 && args[0].equals("-segment"))
+        } else if (args.length >= 4 && args[0].equals("-segment"))
         {
-            Segmenter s = new Segmenter (Lexicon.loadFromFile(args[1]));
-            s.segmentFile(args[2], args[3]);
+            Lexicon l = new Lexicon();
+            for (int i = 3; i < args.length; i++)
+                l.addFromFile(args[i].substring(args[i].indexOf('=') + 1), args[i].substring(0, args[i].indexOf('=')));
+            Segmenter s = new Segmenter(l);
+            s.segmentFile(args[1], args[2]);
         } else if (args.length == 4 && args[0].equals("-filter"))
         {
-            Filter.loadFromFile(args[1]).filterList(args[2], args[3]);
+            Filter.loadFromFile(args[3]).filterList(args[1], args[2]);
         } else
             printInfo();
     }
@@ -39,9 +46,9 @@ public class SegmenterUI
     {
         System.out.println("To segment a single string against default worlist, pass it as parameter.");
         System.out.println("To segment each line in a file, use following parameters:");
-        System.out.println("\t-segment wordlist input_file output_file");
+        System.out.println("\t-segment input_file output_file lang1=wordlist1 lang2=wordlist2 ...");
         System.out.println("To filter a wordlist, use following parameters:");
-        System.out.println("\t-filter filter_file input_file output_file");
+        System.out.println("\t-filter input_file output_file filter_file");
         System.out.println();
     }
 }

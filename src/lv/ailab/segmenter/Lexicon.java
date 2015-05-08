@@ -10,12 +10,19 @@ import java.io.*;
  */
 public class Lexicon
 {
-    public PatriciaTrie<String> data = new PatriciaTrie<>();
+    public PatriciaTrie<Entry> data = new PatriciaTrie<>();
 
-    public static Lexicon loadFromFile(String wordListFile)
+    /**
+     * Load contents of the file in to this lexicon without deleting previously
+     * loaded things.
+     * @param wordListFile file to load
+     * @param lang language or source information to add for words from this
+     *             file
+     * @throws IOException
+     */
+    public void addFromFile(String wordListFile, String lang)
     throws IOException
     {
-        Lexicon l = new Lexicon();
         System.out.println("Loading wordlist...");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
@@ -23,23 +30,31 @@ public class Lexicon
         int count = 0;
         while (line != null)
         {
+            count++;
             String[] parts = line.split("\t");
-            if (parts.length != 2)
+            if (parts.length < 1 || parts.length > 2 )
                 System.err.println("Unexpected line in word file: \"" + line + "\"");
             else
             {
-                Entry e = new Entry (parts[0], parts[1]);
-                l.data.put(e.form, e.lemma);
-                l.data.put(e.noDiacritics, e.lemma);
-                l.data.put(e.transliterated, e.lemma);
+                String form = parts[0];
+                String lemma = parts.length > 1 ? parts[1] : parts[0];
+                String noDiacritics = StringUtils.replaceChars(form,
+                        "āčēģīķļņōŗšūž",
+                        "acegiklnorsuz");
+                String transliterated = StringUtils.replaceEach(form,
+                        new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
+                        new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
+                Entry e = new Entry (lemma, lang);
+
+                data.put(form, e);
+                data.put(noDiacritics, e);
+                data.put(transliterated, e);
             }
             if (count % 1000 == 0) System.out.print(count + " loaded.\r");
-            count++;
             line = in.readLine();
         }
         in.close();
         System.out.println(count + " loaded. Done.");
-        return l;
     }
 
     /**
@@ -47,21 +62,13 @@ public class Lexicon
      */
     public static class Entry
     {
-        public final String form;
+        public final String lang;
         public final String lemma;
-        public final String noDiacritics;
-        public final String transliterated;
 
-        public Entry (String form, String lemma)
+        public Entry (String lemma, String language)
         {
-            this.form = form == null ? "" : form.toLowerCase();
-            this.lemma = lemma == null ? "" : lemma.toLowerCase();
-            this.noDiacritics = StringUtils.replaceChars(this.form,
-                    "āčēģīķļņōŗšūž",
-                    "acegiklnorsuz");
-            this.transliterated = StringUtils.replaceEach(this.form,
-                    new String[]{"ā",  "č",  "ē",  "ģ",  "ī",  "ķ",  "ļ",  "ņ",  "ō",  "ŗ",  "š",  "ū",  "ž"},
-                    new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
+            this.lemma = lemma;
+            this.lang = language;
 
         }
 
@@ -72,10 +79,8 @@ public class Lexicon
             try
             {
                 Entry oe = (Entry) o;
-                return (form == oe.form || form != null && form.equals(oe.form)) &&
-                        (lemma == oe.lemma || lemma != null && lemma.equals(oe.lemma)) &&
-                        (noDiacritics == oe.noDiacritics || noDiacritics != null && noDiacritics.equals(oe.noDiacritics)) &&
-                        (transliterated == oe.transliterated || transliterated != null && transliterated.equals(oe.transliterated));
+                return ((lemma == oe.lemma || lemma != null && lemma.equals(oe.lemma)) &&
+                        (lang == oe.lang || lang != null && lang.equals(oe.lang)));
             } catch (ClassCastException e)
             {
                 return false;
@@ -84,10 +89,8 @@ public class Lexicon
 
         public int hashCode()
         {
-            return (form == null ? 0 : form.hashCode()) * 7 +
-                    (lemma == null ? 0 : lemma.hashCode()) * 47 +
-                    (noDiacritics == null ? 0 : noDiacritics.hashCode()) * 647 +
-                    (transliterated == null ? 0 : transliterated.hashCode()) * 1637;
+            return (lang == null ? 0 : lang.hashCode()) * 647 +
+                    (lemma == null ? 0 : lemma.hashCode()) * 47;
         }
     }
 }

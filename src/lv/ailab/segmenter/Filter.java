@@ -12,6 +12,7 @@ import java.net.IDN;
  */
 public class Filter
 {
+    public static int MINIMUM_LENGTH = 2;
     public PatriciaTrie<Boolean> data = new PatriciaTrie<>();
 
     public static Filter loadFromFile(String wordListFile)
@@ -51,13 +52,14 @@ public class Filter
      */
     public boolean isAccepted(String word)
     {
-        return !data.prefixMap(word).isEmpty();
+        return !data.prefixMap(word).isEmpty() && word.length() >= MINIMUM_LENGTH;
     }
 
     /**
      * Creates a filtered version of the wordlist.
      * @param inFile path to the wordlist file; expected format: one word per
      *               line with ignorable information after tab character
+     *               (optional)
      * @param outFile path to the result file; result file will contain only
      *                lines where word before tab gives true by isAccepted()
      */
