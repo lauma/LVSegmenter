@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/Lexicon.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/Lexicon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmentationResult.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmentationResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" />
-    </list>
+    <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="" />
     <ignored path="LVSegmenter.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -375,7 +370,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1290" height="776" extended-state="6" />
+    <frame x="-4" y="-4" width="1290" height="776" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -386,7 +381,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22028527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22028527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296355" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21612903" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
