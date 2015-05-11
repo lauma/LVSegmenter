@@ -1,8 +1,6 @@
 package lv.ailab.segmenter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Object for representing Segmenter's results.
@@ -12,19 +10,31 @@ public class SegmentationResult
     /**
      * Original string.
      */
-    String original;
+    public String original;
     /**
      * Fond segmentation variants for given string.
      */
-    public ArrayList<ArrayList<String>> segmentations;
+    public ArrayList<SegmentationVariant> segmentations;
     /**
      * All valid "words" (accepted as word by lexicon or regexp) that are
      * found given string.
      */
     public HashMap<String, List<Lexicon.Entry>> foundWords;
 
+/*    public void sortSegByLangs()
+    {
+        segmentations.sort(new Comparator<ArrayList<String>>() {
+            @Override
+            public int compare(ArrayList<String> o1, ArrayList<String> o2)
+            {
+                HashSet<String>
+                return 0;
+            }
+        });
+    }*/
+
     public SegmentationResult(String original,
-            ArrayList<ArrayList<String>> segmentations,
+            ArrayList<SegmentationVariant> segmentations,
             HashMap<String, List<Lexicon.Entry>> foundWords)
     {
         this.original = original;
@@ -38,18 +48,11 @@ public class SegmentationResult
         res.append("{\n\t\"String\":\"");
         res.append(original);
         res.append("\",\n\t\"SegmentationVariants\":[");
-        for (ArrayList<String> variant : segmentations)
+        for (SegmentationVariant variant : segmentations)
         {
-            res.append("\n\t\t[");
-            for (String word : variant)
-            {
-                res.append("\"");
-                res.append(word);
-                res.append("\", ");
-            }
-            if (res.toString().endsWith(", "))
-                res.delete(res.length()-2, res.length());
-            res.append("],");
+            res.append("\n\t\t");
+            res.append(variant.toJSONSegmentList());
+            res.append(",");
         }
         if (res.toString().endsWith(","))
             res.delete(res.length()-1, res.length());

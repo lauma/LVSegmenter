@@ -3,8 +3,8 @@ import org.apache.commons.collections4.trie.PatriciaTrie;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2015-05-06.
@@ -12,7 +12,8 @@ import java.util.List;
  */
 public class Lexicon
 {
-    public PatriciaTrie<List<Entry>> data = new PatriciaTrie<>();
+    protected PatriciaTrie<List<Entry>> data = new PatriciaTrie<>();
+    protected Set<String> langStubs = new HashSet<>();
 
     /**
      * Load contents of the file in to this lexicon without deleting previously
@@ -26,6 +27,7 @@ public class Lexicon
     throws IOException
     {
         System.out.println("Loading wordlist...");
+        langStubs.add(lang);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
         String line = in.readLine();
@@ -57,6 +59,28 @@ public class Lexicon
         }
         in.close();
         System.out.println(count + " loaded. Done.");
+    }
+
+    public Set<String> getLanguages ()
+    {
+        return langStubs;
+    }
+
+    public Set<String> getLanguages (String key)
+    {
+        List<Entry> entries = data.getOrDefault(key, new LinkedList<Entry>());
+        return entries.stream().map(e -> e.lang).collect(Collectors.toSet());
+    }
+
+    public Set<String> getLemmas (String key)
+    {
+        List<Entry> entries = data.getOrDefault(key, new LinkedList<Entry>());
+        return entries.stream().map(e -> e.lemma).collect(Collectors.toSet());
+    }
+
+    public List<Entry> get(String key)
+    {
+        return data.get(key);
     }
 
     public void add(String key, Entry desc)

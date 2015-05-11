@@ -5,8 +5,8 @@ import java.io.IOException;
 
 public class SegmenterUI
 {
-    public static String WORDLIST_FILE_LV = "wordlist-filtered.txt";
-    public static String WORDLIST_FILE_EN="google-10000-filtered-english.txt";
+    public static String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
+    public static String WORDLIST_FILE_EN = "google-10000-filtered-english.txt";
     //public Segmenter segmenter;
 
    // public SegmenterUI()
@@ -24,14 +24,21 @@ public class SegmenterUI
             l.addFromFile(WORDLIST_FILE_LV, "lv");
             l.addFromFile(WORDLIST_FILE_EN, "en");
             Segmenter s = new Segmenter (l);
-            System.out.println(s.segment(args[0]).toJSON());
+            long beginTime = System.nanoTime();
+            String res = s.segment(args[0]).toJSON();
+            long endTime = System.nanoTime();
+            System.out.println(res);
+            System.out.printf("Segmented in %.2f seconds.\n", (double) (endTime - beginTime) / 1000000000.0);
         } else if (args.length >= 4 && args[0].equals("-segment"))
         {
             Lexicon l = new Lexicon();
             for (int i = 3; i < args.length; i++)
                 l.addFromFile(args[i].substring(args[i].indexOf('=') + 1), args[i].substring(0, args[i].indexOf('=')));
             Segmenter s = new Segmenter(l);
+            long beginTime = System.nanoTime();
             s.segmentFile(args[1], args[2]);
+            long endTime = System.nanoTime();
+            System.out.printf("Segmented in %.2f in seconds.\n", (double)(endTime - beginTime)/1000000000.0);
         } else if (args.length == 4 && args[0].equals("-filter"))
         {
             Filter.loadFromFile(args[3]).filterList(args[1], args[2]);

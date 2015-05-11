@@ -3,6 +3,7 @@ package lv.ailab.segmenter;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2015-05-08.
@@ -14,12 +15,12 @@ public class Segmenter
     /**
      * Trie-style data structure containing valid words.
      */
-    Lexicon lexicon;
+    public Lexicon lexicon;
     /**
      * Regular expression representing valid words that are not included in
      * lexicon.
      */
-    Pattern validSegment = Pattern.compile("\\d+");
+    public Pattern validSegment = Pattern.compile("\\d+");
 
     public Segmenter (Lexicon l)
     throws IOException
@@ -33,7 +34,7 @@ public class Segmenter
         // variant found, ending in this position.
         ArrayList<Boolean> dynamicTable = new ArrayList<>(s.length());
         // i-th position contains segmentation variants for s.substring(0, i)
-        ArrayList<ArrayList<ArrayList<String>>> memorizedWords = new ArrayList<>(s.length());
+        ArrayList<ArrayList<SegmentationVariant>> memorizedWords = new ArrayList<>(s.length());
         // in case overall segmentation is not successful, any reasonable
         // substring might be usefull
         HashMap<String, List<Lexicon.Entry>> foundWords = new HashMap<>();
@@ -51,24 +52,24 @@ public class Segmenter
                 if (dynamicTable.get(begin))
                 {
                     String potWord = s.substring(begin, end);
-                    List<Lexicon.Entry> found = lexicon.data.get(potWord);
+                    List<Lexicon.Entry> found = lexicon.get(potWord);
                     if ((found == null || found.size() < 1) && validSegment.matcher(potWord).matches())
                         found = new LinkedList<Lexicon.Entry>()
                             {{add(new Lexicon.Entry(potWord, "regexp"));}};
                     if (found != null)
                     {
+                        Set<String> langs = null;
                         dynamicTable.set(end, true);
                         foundWords.put(potWord, found);
                         if (memorizedWords.get(begin).isEmpty())
                         {
-                            ArrayList<String> newVariant = new ArrayList<>();
-                            newVariant.add(potWord);
+                            SegmentationVariant newVariant = new SegmentationVariant();
+                            newVariant.addNext(potWord);
                             memorizedWords.get(end).add(newVariant);
                         }
-                        else for (ArrayList<String> variant: memorizedWords.get(begin))
+                        else for (SegmentationVariant variant: memorizedWords.get(begin))
                         {
-                            ArrayList<String> newVariant = (ArrayList<String>) variant.clone();
-                            newVariant.add(potWord);
+                            SegmentationVariant newVariant = variant.makeNext(potWord);
                             memorizedWords.get(end).add(newVariant);
                         }
                     }
