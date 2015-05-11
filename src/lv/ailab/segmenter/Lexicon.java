@@ -3,6 +3,8 @@ import org.apache.commons.collections4.trie.PatriciaTrie;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created on 2015-05-06.
@@ -10,7 +12,7 @@ import java.io.*;
  */
 public class Lexicon
 {
-    public PatriciaTrie<Entry> data = new PatriciaTrie<>();
+    public PatriciaTrie<List<Entry>> data = new PatriciaTrie<>();
 
     /**
      * Load contents of the file in to this lexicon without deleting previously
@@ -46,15 +48,26 @@ public class Lexicon
                         new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
                 Entry e = new Entry (lemma, lang);
 
-                data.put(form, e);
-                data.put(noDiacritics, e);
-                data.put(transliterated, e);
+                add(form, e);
+                add(noDiacritics, e);
+                add(transliterated, e);
             }
             if (count % 1000 == 0) System.out.print(count + " loaded.\r");
             line = in.readLine();
         }
         in.close();
         System.out.println(count + " loaded. Done.");
+    }
+
+    public void add(String key, Entry desc)
+    {
+        if (data.containsKey(key))
+        {
+            List<Entry> container = data.get(key);
+            if (!container.contains(desc))
+                container.add(desc);
+        }
+        else data.put(key, new LinkedList<Entry>(){{add(desc);}});
     }
 
     /**
