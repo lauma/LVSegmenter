@@ -13,7 +13,7 @@ import java.util.Map;
 public class SegmenterData
 {
     /**
-     * String being segmented
+     * String being segmented.
      */
     protected final String data;
     /**

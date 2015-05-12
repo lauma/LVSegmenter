@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
+ * Tool for segmenting strings into words.
  * Created on 2015-05-08.
- *
  * @author Lauma
  */
 public class Segmenter

@@ -1,8 +1,10 @@
 package lv.ailab.segmenter;
 
-
 import java.io.IOException;
 
+/**
+ * Sample interface, demonstrating usage for segmenter and lexicon filter.
+ */
 public class SegmenterUI
 {
     public static String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
@@ -15,6 +17,9 @@ public class SegmenterUI
     //    segmenter = new Segmenter (Lexicon.loadFromFile(WORDLIST_FILE_LV));
     //}
 
+    /**
+     * Run Segmenter or Filter tools.
+     */
     public static void main(String[] args)
     throws IOException
     {

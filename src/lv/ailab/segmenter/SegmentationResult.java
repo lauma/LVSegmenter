@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Object for representing Segmenter's results.
+ * Container object representing Segmenter's results.
  */
 public class SegmentationResult
 {
@@ -22,7 +22,7 @@ public class SegmentationResult
      */
     public Map<String, List<Lexicon.Entry>> foundWords;
 
-/*    public void sortSegByLangs()
+    /*public void sortSegByLangs()
     {
         segmentations.sort(new Comparator<ArrayList<String>>() {
             @Override
@@ -43,6 +43,9 @@ public class SegmentationResult
         this.foundWords = foundWords;
     }
 
+    /**
+     * @return Slightly formated JSON reprezentation
+     */
     public String toJSON()
     {
         StringBuilder res = new StringBuilder();
