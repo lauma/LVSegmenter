@@ -28,28 +28,21 @@ public class Segmenter
         lexicon = l;
     }
 
+    /**
+     * Segment given string.
+     * @param s string to segment
+     * @return  segmentation results containing all valid segmentations and all
+     *          words found in this string
+     */
     public SegmentationResult segment(String s)
     {
-        // i-th position contains information, if there is a segmentation
-        // variant found, ending in this position.
-        ArrayList<Boolean> dynamicTable = new ArrayList<>(s.length());
-        // i-th position contains segmentation variants for s.substring(0, i)
-        ArrayList<ArrayList<SegmentationVariant>> memorizedWords = new ArrayList<>(s.length());
-        // in case overall segmentation is not successful, any reasonable
-        // substring might be usefull
-        HashMap<String, List<Lexicon.Entry>> foundWords = new HashMap<>();
-        for (int i = 0; i < s.length() + 1; i++)
-        {
-            dynamicTable.add(false);
-            memorizedWords.add(new ArrayList<>());
-        }
-        dynamicTable.set(0, true);
+        SegmenterData memory = new SegmenterData(s);
 
         for (int end = 1; end <= s.length(); end++)
         {
             for (int begin = 0; begin < end; begin++)
             {
-                if (dynamicTable.get(begin))
+                if (memory.isBegin(begin))
                 {
                     String potWord = s.substring(begin, end);
                     List<Lexicon.Entry> found = lexicon.get(potWord);
@@ -57,32 +50,17 @@ public class Segmenter
                         found = new LinkedList<Lexicon.Entry>()
                             {{add(new Lexicon.Entry(potWord, "regexp"));}};
                     if (found != null)
-                    {
-                        Set<String> langs = null;
-                        dynamicTable.set(end, true);
-                        foundWords.put(potWord, found);
-                        if (memorizedWords.get(begin).isEmpty())
-                        {
-                            SegmentationVariant newVariant = new SegmentationVariant();
-                            newVariant.addNext(potWord);
-                            memorizedWords.get(end).add(newVariant);
-                        }
-                        else for (SegmentationVariant variant: memorizedWords.get(begin))
-                        {
-                            SegmentationVariant newVariant = variant.makeNext(potWord);
-                            memorizedWords.get(end).add(newVariant);
-                        }
-                    }
+                        memory.addNextSegment(begin, end, found);
                 }
             }
         }
-        return new SegmentationResult(s, memorizedWords.get(s.length()), foundWords);
+        return memory.getResult();
     }
 
     /**
      * Segments each line in given file and prints out as JSON.
-     * @param inFile path to data file
-     * @param outFile path to result file
+     * @param inFile    path to data file
+     * @param outFile   path to result file
      */
     public void segmentFile(String inFile, String outFile)
     throws IOException

@@ -1,6 +1,7 @@
 package lv.ailab.segmenter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Object for representing Segmenter's results.
@@ -14,12 +15,12 @@ public class SegmentationResult
     /**
      * Fond segmentation variants for given string.
      */
-    public ArrayList<SegmentationVariant> segmentations;
+    public List<SegmentationVariant> segmentations;
     /**
      * All valid "words" (accepted as word by lexicon or regexp) that are
      * found given string.
      */
-    public HashMap<String, List<Lexicon.Entry>> foundWords;
+    public Map<String, List<Lexicon.Entry>> foundWords;
 
 /*    public void sortSegByLangs()
     {
@@ -34,8 +35,8 @@ public class SegmentationResult
     }*/
 
     public SegmentationResult(String original,
-            ArrayList<SegmentationVariant> segmentations,
-            HashMap<String, List<Lexicon.Entry>> foundWords)
+            List<SegmentationVariant> segmentations,
+            Map<String, List<Lexicon.Entry>> foundWords)
     {
         this.original = original;
         this.segmentations = segmentations;

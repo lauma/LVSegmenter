@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class SegmentationVariant //implements Cloneable
 {
-    private LinkedList<String> segments = new LinkedList<>();
+    protected LinkedList<String> segments = new LinkedList<>();
 
     public void addNext(String segment)
     {
