@@ -1,9 +1,6 @@
 package lv.ailab.segmenter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Data object used for storing data while performing segmentation.
@@ -26,7 +23,7 @@ public class SegmenterData
      * i-th position contains segmentation variants for
      * string_to_segment.substring(0, i)
      */
-    protected List<List<SegmentationVariant>> memorizedWords;
+    protected List<List<SegmentationVariant>> memorizedVariants;
 
     /**
      * Collection of all potential words (and information about them) found
@@ -37,14 +34,14 @@ public class SegmenterData
     public SegmenterData (String data)
     {
         this.data = data;
-        dynamicTable = new ArrayList<>(data.length());
-        memorizedWords = new ArrayList<>(data.length());
+        dynamicTable = new ArrayList<>(data.length() + 1);
+        memorizedVariants = new ArrayList<>(data.length() + 1);
         foundWords = new HashMap<>();
 
-        for (int i = 0; i < data.length() + 1; i++)
+        for (int i = 0; i <= data.length() + 1; i++)
         {
             dynamicTable.add(false);
-            memorizedWords.add(new ArrayList<>());
+            memorizedVariants.add(new ArrayList<>());
         }
         dynamicTable.set(0, true);
     }
@@ -60,27 +57,43 @@ public class SegmenterData
     }
 
     /**
-     * If the segmenter has found next segment, this function updates data
-     * structure accordingly.
-     * @param begin begin index of the segment
-     * @param end end index of the segment
-     * @param wordEntries entries describing word found in this segment
+     * Set given index as valid ending/begining word border.
+     * @param index index for which future isBegin() calls return true
      */
-    public void addNextSegment(int begin, int end, List<Lexicon.Entry> wordEntries)
+    public void setBeginValid (int index)
     {
-        String word = data.substring(begin, end);
-        dynamicTable.set(end, true);
+        dynamicTable.set(index, true);
+    }
+
+    /**
+     * Add new word to collected word map.
+     * @param word          word itself
+     * @param wordEntries   word describing entries
+     */
+    public void addWordEntries(String word, List<Lexicon.Entry> wordEntries)
+    {
         foundWords.put(word, wordEntries);
-        if (memorizedWords.get(begin).isEmpty())
+    }
+
+    /**
+     * From segmentation variants at index "from" constructs segmentation new
+     * variants in index "to" (without deleting other entries at index "to").
+     * @param from begin index of the segment
+     * @param to end index of the segment
+     */
+    public void makeNextSegmentationVariants(int from, int to)
+    {
+        String word = data.substring(from, to);
+        if (memorizedVariants.get(from).isEmpty())
         {
             SegmentationVariant newVariant = new SegmentationVariant();
             newVariant.addNext(word);
-            memorizedWords.get(end).add(newVariant);
+            memorizedVariants.get(to).add(newVariant);
         }
-        else for (SegmentationVariant variant: memorizedWords.get(begin))
+        else for (SegmentationVariant variant: memorizedVariants.get(from))
         {
             SegmentationVariant newVariant = variant.makeNext(word);
-            memorizedWords.get(end).add(newVariant);
+            memorizedVariants.get(to).add(newVariant);
         }
     }
 
@@ -89,6 +102,6 @@ public class SegmenterData
      */
     public SegmentationResult getResult()
     {
-        return new SegmentationResult(data, memorizedWords.get(data.length()), foundWords);
+        return new SegmentationResult(data, memorizedVariants.get(data.length()), foundWords);
     }
 }

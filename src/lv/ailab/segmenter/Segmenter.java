@@ -22,6 +22,13 @@ public class Segmenter
      */
     public Pattern validSegment = Pattern.compile("\\d+");
 
+    /**
+     * Sorts segmentation results by counting how many pairs of adjacent words
+     * from different languages are in segmentation. Enabling this option makes
+     * segmentation notably slower!
+     */
+    public boolean sortByLanguageChanges = false;
+
     public Segmenter (Lexicon l)
     throws IOException
     {
@@ -36,7 +43,9 @@ public class Segmenter
      */
     public SegmentationResult segment(String s)
     {
-        SegmenterData memory = new SegmenterData(s);
+        SegmenterData memory;
+        if (sortByLanguageChanges) memory = new SegmenterDataWithLang(s);
+        else memory = new SegmenterData(s);
 
         for (int end = 1; end <= s.length(); end++)
         {
@@ -50,7 +59,11 @@ public class Segmenter
                         found = new LinkedList<Lexicon.Entry>()
                             {{add(new Lexicon.Entry(potWord, "regexp"));}};
                     if (found != null)
-                        memory.addNextSegment(begin, end, found);
+                    {
+                        memory.setBeginValid(end);
+                        memory.addWordEntries(potWord, found);
+                        memory.makeNextSegmentationVariants(begin, end);
+                    }
                 }
             }
         }

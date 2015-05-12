@@ -28,7 +28,7 @@ public class SegmentationVariant //implements Cloneable
     }
 
     /**
-     * Create new egmentation variant by cloning this variant and adding one
+     * Create new segmentation variant by cloning this variant and adding one
      * more segment.
      * @param nextSegment   segment to add for the newly created segmentation
      *                      variant
