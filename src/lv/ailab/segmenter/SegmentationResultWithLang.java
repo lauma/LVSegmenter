@@ -30,16 +30,32 @@ public class SegmentationResultWithLang extends SegmentationResult
         res.append("{\n\t\"String\":\"");
         res.append(original);
         res.append("\",\n\t\"SegmentationVariants\":[");
-        segmentations.sort((o1, o2) ->
-                new Integer(((SegmentationVariantWithLang) o1).getMinimumLangCount())
-                    .compareTo(new Integer(((SegmentationVariantWithLang) o2).getMinimumLangCount())));
+        segmentations.sort((o1, o2) -> {
+            int comp = new Integer(((SegmentationVariantWithLang) o1)
+                    .getMinimumLangCount())
+                    .compareTo(((SegmentationVariantWithLang) o2).getMinimumLangCount());
+            if (comp == 0)
+                comp = new Integer(((SegmentationVariantWithLang) o1).segments.size())
+                        .compareTo(((SegmentationVariantWithLang) o2).segments.size());
+            return comp;
+        });
         for (SegmentationVariant variant : segmentations)
         {
+            int changes = ((SegmentationVariantWithLang)variant).getMinimumLangCount();
             res.append("\n\t\t{\n\t\t\t\"Segmentation\":");
             res.append(variant.toJSONSegmentList());
             res.append("\n\t\t\t\"LanguageChanges\":");
-            res.append(((SegmentationVariantWithLang)variant).getMinimumLangCount());
-            res.append("},");
+            res.append(changes);
+            res.append("\n\t\t\t\"Languages\":[");
+            for (LanguageSequence seq : ((SegmentationVariantWithLang)variant).getLangSequencesByChangeCount(changes))
+            {
+                res.append("\n\t\t\t\t");
+                res.append(seq.toJSONLangList());
+                res.append(",");
+            }
+            if (res.toString().endsWith(","))
+                res.delete(res.length()-1, res.length());
+            res.append("]},");
         }
         if (res.toString().endsWith(","))
             res.delete(res.length()-1, res.length());

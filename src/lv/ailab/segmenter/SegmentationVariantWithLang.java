@@ -1,6 +1,7 @@
 package lv.ailab.segmenter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Segmentation variant augmented with possible languages for each segment.
@@ -14,8 +15,8 @@ public class SegmentationVariantWithLang extends SegmentationVariant
      * Languages for respective segments.
      */
     //protected LinkedList<HashSet<String>> langs = new LinkedList<>();
-    protected LinkedList<LangAlignVariant> langs = new LinkedList<LangAlignVariant>()
-            {{add(new LangAlignVariant(new LinkedList<String>(), 0));}};
+    protected LinkedList<LanguageSequence> langs = new LinkedList<LanguageSequence>()
+            {{add(new LanguageSequence(new LinkedList<String>(), 0));}};
 
     /**
      * Add next segment with given language(-s) and updates possible language
@@ -26,8 +27,8 @@ public class SegmentationVariantWithLang extends SegmentationVariant
     public void addNext(String nextSegment, Set<String> segmentLangs)
     {
         super.addNext(nextSegment);
-        LinkedList<LangAlignVariant> nextResults = new LinkedList<>();
-        for (LangAlignVariant variant : langs)
+        LinkedList<LanguageSequence> nextResults = new LinkedList<>();
+        for (LanguageSequence variant : langs)
             for (String lang : segmentLangs)
                 nextResults.add(variant.makeNext(lang));
         langs = nextResults;
@@ -56,7 +57,7 @@ public class SegmentationVariantWithLang extends SegmentationVariant
     {
         SegmentationVariantWithLang res = new SegmentationVariantWithLang();
         res.segments = (LinkedList<String>)this.segments.clone();
-        res.langs = (LinkedList<LangAlignVariant>) this.langs.clone();
+        res.langs = (LinkedList<LanguageSequence>) this.langs.clone();
         res.addNext(nextSegment, langs);
         return res;
     }
@@ -85,40 +86,14 @@ public class SegmentationVariantWithLang extends SegmentationVariant
     }
 
     /**
-     * Information about segmentation variants languages.
-     * NB! One segmentation variant can have multiple language arrangement
-     * variants.
+     * @param changeCount   how many language changes language sequence must
+     *                      contain to be included in result
+     * @return  language sequences with exactly given language change counts
      */
-    protected static class LangAlignVariant
+    public List<LanguageSequence> getLangSequencesByChangeCount(int changeCount)
     {
-        public int differences;
-        public LinkedList<String> langs;
-
-        public LangAlignVariant (List<String> langs, int differences)
-        {
-            this.differences = differences;
-            this.langs = new LinkedList<String>(){{addAll(langs);}};
-        }
-
-        public LangAlignVariant (String firstLang, int differences)
-        {
-            this.differences = differences;
-            this.langs = new LinkedList<String>(){{add(firstLang);}};
-        }
-
-        public LangAlignVariant makeNext (String nextLang)
-        {
-            LangAlignVariant res = new LangAlignVariant(langs, differences);
-            res.addNext(nextLang);
-            return res;
-        }
-
-        public void addNext (String nextLang)
-        {
-            if (langs.size() > 0 && !langs.getLast().equals(nextLang))
-                differences++;
-            langs.add(nextLang);
-        }
-
+        return langs.stream().filter(variant -> variant.differences == changeCount)
+               .collect(Collectors.toList());
     }
+
 }
