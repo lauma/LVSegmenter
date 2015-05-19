@@ -6,15 +6,37 @@ import java.io.*;
 import java.net.IDN;
 
 /**
+ * Filtering functionality. Filter object is contains a list of strings.
+ * Filtering is done, comparing given string against *all substrings* of the
+ * strings contained in the Filter.
+ * This can be used to reduce Segmenter's lexicon size: if list of strings to
+ * segment is available during the inicialization of the Segmenter, lexicon can
+ * can be filtered against that list with the help of Filter object.
  * Created on 2015-05-07.
- *
  * @author Lauma
  */
 public class Filter
 {
+    /**
+     * Minimum word length to be accepted.
+     */
     public static int MINIMUM_LENGTH = 2;
+    /**
+     * Data structure with the list of strings to filter against. For each
+     * string to filter against, this structure contains subststring(0, length),
+     * substring(1, length), ..., substring (length-1, length), and it is used
+     * as prefix map, thus, providing effective way to compare given string
+     * against all substrings of the strings in the filter list.
+     */
     public PatriciaTrie<Boolean> data = new PatriciaTrie<>();
 
+    /**
+     * Initialize Filter object from a list of strings given in the file.
+     * @param wordListFile  path to file with a list of string
+     * @return  Filter objest that can filter against substrings of the strings
+     *          given in the input file
+     * @throws IOException
+     */
     public static Filter loadFromFile(String wordListFile)
     throws IOException
     {
@@ -47,8 +69,8 @@ public class Filter
     /**
      * Evaluate single word.
      * @param word token to be evaluated
-     * @return true if filterlist contained word string as substring for any of
-     *         the strings; false otherwise
+     * @return true if filterlist contains word as substring for any of the
+     *         strings stored in the filter; false otherwise
      */
     public boolean isAccepted(String word)
     {
@@ -93,6 +115,12 @@ public class Filter
         out.close();
     }
 
+    /**
+     * Comandline inteface. Call without parameters to get help.
+     * @param args parameter list: 1) file against which filter; 2) wordlist to
+     *             be filtered; 3) where to put result.
+     * @throws IOException
+     */
     public static void main (String[] args)
     throws IOException
     {

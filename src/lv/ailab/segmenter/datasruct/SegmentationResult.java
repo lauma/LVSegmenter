@@ -1,8 +1,7 @@
-package lv.ailab.segmenter;
+package lv.ailab.segmenter.datasruct;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Container object representing Segmenter's results.

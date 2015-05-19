@@ -1,6 +1,5 @@
-package lv.ailab.segmenter;
+package lv.ailab.segmenter.datasruct;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 

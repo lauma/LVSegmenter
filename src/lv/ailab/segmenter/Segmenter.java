@@ -1,9 +1,13 @@
 package lv.ailab.segmenter;
 
+import lv.ailab.segmenter.datasruct.Lexicon;
+import lv.ailab.segmenter.datasruct.SegmentationResult;
+import lv.ailab.segmenter.datasruct.SegmenterData;
+import lv.ailab.segmenter.datasruct.SegmenterDataWithLang;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Tool for segmenting strings into words.
@@ -29,8 +33,10 @@ public class Segmenter
      */
     public boolean sortByLanguageChanges = false;
 
+    /**
+     * Initialize Segmenter from a given lexicon.
+     */
     public Segmenter (Lexicon l)
-    throws IOException
     {
         lexicon = l;
     }

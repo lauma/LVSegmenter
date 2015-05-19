@@ -1,9 +1,6 @@
-package lv.ailab.segmenter;
+package lv.ailab.segmenter.datasruct;
 
-import javax.print.attribute.HashDocAttributeSet;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 /**
  * Single segmentation variant. Basically it is a wrapped list of strings. At

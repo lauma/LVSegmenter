@@ -1,25 +1,20 @@
 package lv.ailab.segmenter;
 
+import lv.ailab.segmenter.datasruct.Lexicon;
+
 import java.io.IOException;
 
 /**
- * Sample interface, demonstrating usage for segmenter and lexicon filter.
+ * Sample interface, demonstrating usage for Segmenter and lexicon filter.
  */
 public class SegmenterUI
 {
     public static String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
     public static String WORDLIST_FILE_EN = "google-10000-filtered-english.txt";
     public static boolean SORT_BY_LANG_CHANGES = true;
-    //public Segmenter segmenter;
-
-   // public SegmenterUI()
-    //throws IOException
-    //{
-    //    segmenter = new Segmenter (Lexicon.loadFromFile(WORDLIST_FILE_LV));
-    //}
 
     /**
-     * Run Segmenter or Filter tools.
+     * Run Segmenter or Filter tools. To get usage info, provide no parameters.
      */
     public static void main(String[] args)
     throws IOException
@@ -55,7 +50,7 @@ public class SegmenterUI
     }
 
     /**
-     * Print information about this package.
+     * Print information about this interface.
      */
     protected static void printInfo()
     {
