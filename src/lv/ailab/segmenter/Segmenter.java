@@ -84,7 +84,7 @@ public class Segmenter
     public void segmentFile(String inFile, String outFile)
     throws IOException
     {
-        System.out.println("Segmenting file...");
+        System.err.println("Segmenting file...");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(inFile), "UTF-8"));
         BufferedWriter out = new BufferedWriter(
@@ -96,12 +96,12 @@ public class Segmenter
         {
             count++;
             out.append(segment(readLine).toJSON());
-            if (count % 1000 == 0) System.out.print(count + " processed.\r");
+            if (count % 1000 == 0) System.err.print(count + " processed.\r");
             readLine = in.readLine();
             if (readLine != null) out.append(",\n");
         }
         out.append("\n]");
-        System.out.println(count + " processed. Done.");
+        System.err.println(count + " processed. Done.");
         in.close();
         out.flush();
         out.close();

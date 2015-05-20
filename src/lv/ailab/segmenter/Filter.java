@@ -41,7 +41,7 @@ public class Filter
     throws IOException
     {
         Filter f = new Filter();
-        System.out.println("Loading filter list...");
+        System.err.println("Loading filter list...");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
         String readLine = in.readLine();
@@ -49,7 +49,7 @@ public class Filter
         while (readLine != null)
         {
             //if (readLine.startsWith("xn--"))
-            //  System.out.println(IDN.toUnicode(readLine));
+            //  System.err.println(IDN.toUnicode(readLine));
             readLine = IDN.toUnicode(readLine, 0);
             String[] parts = readLine.split("[.-]");
 
@@ -57,12 +57,12 @@ public class Filter
                 for (int i = 0; i < part.length(); i++)
                     f.data.put(part.substring(i, part.length()), true);
 
-            if (count % 1000 == 0) System.out.print(count + " loaded.\r");
+            if (count % 1000 == 0) System.err.print(count + " loaded.\r");
             readLine = in.readLine();
             count++;
         }
         in.close();
-        System.out.println(count + " loaded. Done.");
+        System.err.println(count + " loaded. Done.");
         return f;
     }
 
@@ -88,7 +88,7 @@ public class Filter
     public void filterList (String inFile, String outFile)
             throws IOException
     {
-        System.out.println("Filtering file...");
+        System.err.println("Filtering file...");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(inFile), "UTF-8"));
         BufferedWriter out = new BufferedWriter(
@@ -106,10 +106,10 @@ public class Filter
                 out.newLine();
                 countGood++;
             }
-            if (countAll % 1000 == 0) System.out.print(countAll + " processed. " + countGood + " good.\r");
+            if (countAll % 1000 == 0) System.err.print(countAll + " processed. " + countGood + " good.\r");
             readLine = in.readLine();
         }
-        System.out.println(countAll + " processed. " + countGood + " good. Done.");
+        System.err.println(countAll + " processed. " + countGood + " good. Done.");
         in.close();
         out.flush();
         out.close();
@@ -126,10 +126,10 @@ public class Filter
     {
         if (args.length < 3)
         {
-            System.out.println("To filter a wordlist, pass following parameters:");
-            System.out.println("\t1) file against which filter;");
-            System.out.println("\t2) wordlist to be filtered;");
-            System.out.println("\t3) where to put result.");
+            System.err.println("To filter a wordlist, pass following parameters:");
+            System.err.println("\t1) file against which filter;");
+            System.err.println("\t2) wordlist to be filtered;");
+            System.err.println("\t3) where to put result.");
             return;
         }
         Filter.loadFromFile(args[0]).filterList(args[1], args[2]);
