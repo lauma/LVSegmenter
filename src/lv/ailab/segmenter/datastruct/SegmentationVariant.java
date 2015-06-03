@@ -1,4 +1,4 @@
-package lv.ailab.segmenter.datasruct;
+package lv.ailab.segmenter.datastruct;
 
 import java.util.LinkedList;
 

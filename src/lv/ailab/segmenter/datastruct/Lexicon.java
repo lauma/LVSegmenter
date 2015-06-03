@@ -1,4 +1,4 @@
-package lv.ailab.segmenter.datasruct;
+package lv.ailab.segmenter.datastruct;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 import org.apache.commons.lang3.StringUtils;
 

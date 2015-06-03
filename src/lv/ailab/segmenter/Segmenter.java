@@ -1,9 +1,9 @@
 package lv.ailab.segmenter;
 
-import lv.ailab.segmenter.datasruct.Lexicon;
-import lv.ailab.segmenter.datasruct.SegmentationResult;
-import lv.ailab.segmenter.datasruct.SegmenterData;
-import lv.ailab.segmenter.datasruct.SegmenterDataWithLang;
+import lv.ailab.segmenter.datastruct.Lexicon;
+import lv.ailab.segmenter.datastruct.SegmentationResult;
+import lv.ailab.segmenter.datastruct.SegmenterData;
+import lv.ailab.segmenter.datastruct.SegmenterDataWithLang;
 
 import java.io.*;
 import java.util.*;

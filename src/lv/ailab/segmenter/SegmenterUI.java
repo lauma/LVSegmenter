@@ -1,6 +1,6 @@
 package lv.ailab.segmenter;
 
-import lv.ailab.segmenter.datasruct.Lexicon;
+import lv.ailab.segmenter.datastruct.Lexicon;
 
 import java.io.BufferedReader;
 import java.io.IOException;
