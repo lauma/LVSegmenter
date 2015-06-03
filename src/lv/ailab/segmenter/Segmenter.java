@@ -8,6 +8,7 @@ import lv.ailab.segmenter.datastruct.SegmenterDataWithLang;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.net.IDN;
 
 /**
  * Tool for segmenting strings into words.
@@ -49,6 +50,7 @@ public class Segmenter
      */
     public SegmentationResult segment(String s)
     {
+        s = IDN.toUnicode(s, 0);
         SegmenterData memory;
         if (sortByLanguageChanges) memory = new SegmenterDataWithLang(s);
         else memory = new SegmenterData(s);
