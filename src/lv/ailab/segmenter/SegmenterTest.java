@@ -27,12 +27,21 @@ public class SegmenterTest {
 	}
 	
 	@Test
-	public void testSegment() {
-		assertEquals("testa segments", String.join(" ", segmenter.segment("testasegments").primaryResult()));
-		assertEquals("king size", String.join(" ", segmenter.segment("kingsize").primaryResult()));		 
-		assertEquals("biroja iekārtas", String.join(" ", segmenter.segment("biroja-iekartas").primaryResult()));
-//		assertEquals("betonēšana", String.join(" ", segmenter.segment("xn--betonana-7cb49e").primaryResult()));
-		assertEquals("vīna skola", String.join(" ", segmenter.segment("xn--vnaskola-9ib").primaryResult()));
+	public void sanityCheck() {
+		assertEquals("tests segments", String.join(" ", segmenter.segment("testasegments").primaryResult()));
 	}
+	
+	@Test
+	public void languages() {
+		assertEquals("king size", String.join(" ", segmenter.segment("kingsize").primaryResult()));		 
+		assertEquals("birojs - iekārta", String.join(" ", segmenter.segment("biroja-iekartas").primaryResult()));
+	}
+	
+	@Test
+	public void unicode() {
+		assertEquals("vīns skola", String.join(" ", segmenter.segment("xn--vnaskola-9ib").primaryResult()));
+		assertEquals("betonēt", String.join(" ", segmenter.segment("xn--betonana-7cb49e").primaryResult()));
+	}
+
 
 }

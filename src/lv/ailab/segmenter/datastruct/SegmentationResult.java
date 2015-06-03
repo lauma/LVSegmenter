@@ -1,5 +1,6 @@
 package lv.ailab.segmenter.datastruct;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,15 @@ public class SegmentationResult
     }
     
     public List<String> primaryResult() {
-    	return segmentations.get(0).segments;
+		List<String> res = new LinkedList<String>();
+    	if (segmentations.isEmpty()) {
+    		res.add(this.original);
+    	} else {
+        	for (String segment : segmentations.get(0).segments) {
+        		res.add(foundWords.get(segment).get(0).lemma);
+        	}    		
+    	}
+		return res;
     }
 
     /**
