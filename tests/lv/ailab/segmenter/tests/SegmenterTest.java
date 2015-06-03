@@ -1,9 +1,10 @@
-package lv.ailab.segmenter;
+package lv.ailab.segmenter.tests;
 
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 
 import org.junit.BeforeClass;

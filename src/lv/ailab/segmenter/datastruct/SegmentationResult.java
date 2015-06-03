@@ -43,7 +43,11 @@ public class SegmentationResult
         this.segmentations = segmentations;
         this.foundWords = foundWords;
     }
-    
+
+    /**
+     * Currently for test purposes.
+     * @return
+     */
     public List<String> primaryResult() {
 		List<String> res = new LinkedList<String>();
     	if (segmentations.isEmpty()) {
