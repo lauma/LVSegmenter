@@ -42,6 +42,10 @@ public class SegmentationResult
         this.segmentations = segmentations;
         this.foundWords = foundWords;
     }
+    
+    public List<String> primaryResult() {
+    	return segmentations.get(0).segments;
+    }
 
     /**
      * @return Slightly formatted JSON representation

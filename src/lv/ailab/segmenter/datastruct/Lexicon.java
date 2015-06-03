@@ -54,7 +54,7 @@ public class Lexicon
                 add(noDiacritics, e);
                 add(transliterated, e);
             }
-            if (count % 1000 == 0) System.out.print(count + " loaded.\r");
+            if (count % 10000 == 0) System.out.print(count + " loaded.\r");
             line = in.readLine();
         }
         in.close();
