@@ -26,7 +26,7 @@ public class Lexicon
     public void addFromFile(String wordListFile, String lang)
     throws IOException
     {
-        System.out.println("Loading wordlist...");
+        System.err.println("Loading wordlist...");
         langStubs.add(lang);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
@@ -58,7 +58,7 @@ public class Lexicon
             line = in.readLine();
         }
         in.close();
-        System.out.println(count + " loaded. Done.");
+        System.err.println(count + " loaded. Done.");
     }
 
     public Set<String> getLanguages ()
