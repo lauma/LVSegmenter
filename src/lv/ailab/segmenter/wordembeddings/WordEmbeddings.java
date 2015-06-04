@@ -97,6 +97,8 @@ public class WordEmbeddings {
 		double worstValue = -1;
 		int worstIndex = 0;
 		for (Entry<String, double[]> candidate : vectors.entrySet()) {
+			if (candidate.getKey().equalsIgnoreCase(word)) 
+				continue;
 			double cosine = cosineSimilarity(vectorA, candidate.getValue());
 			
 			if (cosine > worstValue) {

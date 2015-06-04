@@ -1,8 +1,5 @@
 package lv.ailab.segmenter.tests;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
 import java.util.Arrays;
 
 import lv.ailab.segmenter.wordembeddings.WordEmbeddings;

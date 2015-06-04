@@ -2,6 +2,7 @@ package lv.ailab.segmenter.webservice;
 
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
+import lv.ailab.segmenter.wordembeddings.WordEmbeddings;
 
 import org.restlet.*;
 import org.restlet.data.*;
@@ -9,6 +10,7 @@ import org.restlet.data.*;
 public class DomainServer {
 	static Lexicon lexicon;
 	static Segmenter segmenter;	
+	static WordEmbeddings wordembeddings;
 	static private int port = 8182;
 
 	public static void main(String[] args) throws Exception {
@@ -16,6 +18,7 @@ public class DomainServer {
 //	    String WORDLIST_FILE_EN = "wordsEn-sil.txt";
 	    String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
 	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
+	    String EMBEDDINGS_FILENAME = "lv_lemmas_70p.out";
 	    boolean SORT_BY_LANG_CHANGES = true;
 
 		for (int i=0; i<args.length; i++) {
@@ -37,7 +40,7 @@ public class DomainServer {
 				System.out.println("\nCommand line options:");
 				System.out.println("\t-port 1234 : sets the web server port to some other number than the default 8182");
 				System.out.println("\nWebservice access:");
-				System.out.println("http://localhost:8182/analyze/[word] : morphological analysis of the word (guessing of out-of-vocabulary words disabled by default)");
+				System.out.println("http://localhost:8182/[domainname] : returns alternative variants for this domain name");
 				System.out.flush();
 				System.exit(0);
 			}
@@ -48,6 +51,7 @@ public class DomainServer {
 		lexicon.addFromFile(WORDLIST_FILE_EN, "en");
         segmenter = new Segmenter (lexicon);
         segmenter.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
+        wordembeddings = new WordEmbeddings(EMBEDDINGS_FILENAME);
         
         // Create a new Restlet component and add a HTTP server connector to it 
 	    Component component = new Component();  
@@ -55,6 +59,7 @@ public class DomainServer {
 	    
 	    // Then attach it to the local host 
 	    component.getDefaultHost().attach("/{domainname}", DomainNameResource.class);
+	    component.getDefaultHost().attach("/segment/{domainname}", SegmentResource.class);
 	    
 	    component.start();
 	}
