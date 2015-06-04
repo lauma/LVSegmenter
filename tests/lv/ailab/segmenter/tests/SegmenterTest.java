@@ -29,19 +29,19 @@ public class SegmenterTest {
 	
 	@Test
 	public void sanityCheck() {
-		assertEquals("tests segments", String.join(" ", segmenter.segment("testasegments").primaryResult()));
+		assertEquals("tests segments", segmenter.segment("testasegments").primaryResultString());
 	}
 	
 	@Test
 	public void languages() {
-		assertEquals("king size", String.join(" ", segmenter.segment("kingsize").primaryResult()));		 
-		assertEquals("birojs - iekārta", String.join(" ", segmenter.segment("biroja-iekartas").primaryResult()));
+		assertEquals("king size", segmenter.segment("kingsize").primaryResultString());		 
+		assertEquals("birojs - iekārta", segmenter.segment("biroja-iekartas").primaryResultString());
 	}
 	
 	@Test
 	public void unicode() {
-		assertEquals("vīns skola", String.join(" ", segmenter.segment("xn--vnaskola-9ib").primaryResult()));
-		assertEquals("betonēt", String.join(" ", segmenter.segment("xn--betonana-7cb49e").primaryResult()));
+		assertEquals("vīns skola", segmenter.segment("xn--vnaskola-9ib").primaryResultString());
+		assertEquals("betonēt", segmenter.segment("xn--betonana-7cb49e").primaryResultString());
 	}
 
 

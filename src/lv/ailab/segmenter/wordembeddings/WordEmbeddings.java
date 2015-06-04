@@ -2,7 +2,6 @@ package lv.ailab.segmenter.wordembeddings;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.sun.media.jai.rmi.VectorState;
+import lv.ailab.segmenter.datastruct.Lexicon;
 
 public class WordEmbeddings {
 	private Map<String, double[]> vectors = new HashMap<String, double[]>();
@@ -124,5 +123,11 @@ public class WordEmbeddings {
 		}
 		
 		return Arrays.asList(result);
+	}
+	
+	public void addToLexicon(Lexicon lex){
+		for (String word : vectors.keySet()) {
+			lex.addWord(word, word, "lv");
+		}
 	}
 }

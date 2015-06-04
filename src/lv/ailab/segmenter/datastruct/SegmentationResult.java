@@ -48,16 +48,28 @@ public class SegmentationResult
      * Currently for test purposes.
      * @return
      */
-    public List<String> primaryResult() {
-		List<String> res = new LinkedList<String>();
+    public List<Lexicon.Entry> primaryResult() {
+		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
     	if (segmentations.isEmpty()) {
-    		res.add(this.original);
+    		res.add(new Lexicon.Entry(this.original, this.original, "lv"));
     	} else {
         	for (String segment : segmentations.get(0).segments) {
-        		res.add(foundWords.get(segment).get(0).lemma);
+        		res.add(foundWords.get(segment).get(0));
         	}    		
     	}
 		return res;
+    }
+    
+    /**
+     * Currently for test purposes.
+     * @return
+     */
+    public String primaryResultString() {
+    	List<String> res = new LinkedList<String>();
+    	for (Lexicon.Entry entry : primaryResult()) {
+    		res.add(entry.lemma);
+    	}
+    	return String.join(" ", res);
     }
 
     /**
