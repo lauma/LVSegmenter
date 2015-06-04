@@ -65,7 +65,7 @@ public class Segmenter
                     List<Lexicon.Entry> found = lexicon.get(potWord);
                     if ((found == null || found.size() < 1) && validSegment.matcher(potWord).matches())
                         found = new LinkedList<Lexicon.Entry>()
-                            {{add(new Lexicon.Entry(potWord, "regexp"));}};
+                            {{add(new Lexicon.Entry(potWord, potWord, "regexp"));}};
                     if (found != null)
                     {
                         memory.setBeginValid(end);
