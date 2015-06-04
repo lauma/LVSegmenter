@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="lib" path="lib/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections4-4.0/commons-collections4-4.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections4-4.0/commons-collections4-4.0-test-sources.jar"/>

@@ -12,8 +12,10 @@ public class DomainServer {
 	static private int port = 8182;
 
 	public static void main(String[] args) throws Exception {
-	    String WORDLIST_FILE_LV = "wordlist-lv.txt";
-	    String WORDLIST_FILE_EN = "wordsEn-sil.txt";
+//	    String WORDLIST_FILE_LV = "wordlist-lv.txt";
+//	    String WORDLIST_FILE_EN = "wordsEn-sil.txt";
+	    String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
+	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
 	    boolean SORT_BY_LANG_CHANGES = true;
 
 		for (int i=0; i<args.length; i++) {
