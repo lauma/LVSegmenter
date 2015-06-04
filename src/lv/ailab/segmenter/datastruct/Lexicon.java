@@ -42,23 +42,28 @@ public class Lexicon
             {
                 String form = parts[0];
                 String lemma = parts.length > 1 ? parts[1] : parts[0];
-                String noDiacritics = StringUtils.replaceChars(form,
-                        "āčēģīķļņōŗšūž",
-                        "acegiklnorsuz");
-                String transliterated = StringUtils.replaceEach(form,
-                        new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
-                        new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
-                Entry e = new Entry (lemma, lang);
-
-                add(form, e);
-                add(noDiacritics, e);
-                add(transliterated, e);
+                addWord(form, lemma, lang);
             }
             if (count % 10000 == 0) System.out.print(count + " loaded.\r");
             line = in.readLine();
         }
         in.close();
         System.err.println(count + " loaded. Done.");
+    }
+
+    public void addWord(String form, String lemma, String lang)
+    {
+        String noDiacritics = StringUtils.replaceChars(form,
+                "āčēģīķļņōŗšūž",
+                "acegiklnorsuz");
+        String transliterated = StringUtils.replaceEach(form,
+                new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
+                new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
+        Entry e = new Entry (form, lemma, lang);
+
+        addEntry(form, e);
+        addEntry(noDiacritics, e);
+        addEntry(transliterated, e);
     }
 
     public Set<String> getLanguages ()
@@ -83,7 +88,7 @@ public class Lexicon
         return data.get(key);
     }
 
-    public void add(String key, Entry desc)
+    protected void addEntry(String key, Entry desc)
     {
         if (data.containsKey(key))
         {
@@ -99,11 +104,13 @@ public class Lexicon
      */
     public static class Entry
     {
+        public final String originalForm;
         public final String lang;
         public final String lemma;
 
-        public Entry (String lemma, String language)
+        public Entry (String form, String lemma, String language)
         {
+            originalForm = form;
             this.lemma = lemma;
             this.lang = language;
 
@@ -117,7 +124,8 @@ public class Lexicon
             {
                 Entry oe = (Entry) o;
                 return ((lemma == oe.lemma || lemma != null && lemma.equals(oe.lemma)) &&
-                        (lang == oe.lang || lang != null && lang.equals(oe.lang)));
+                        (lang == oe.lang || lang != null && lang.equals(oe.lang)) &&
+                        (originalForm == oe.originalForm || originalForm != null && originalForm.equals(oe.originalForm)));
             } catch (ClassCastException e)
             {
                 return false;
@@ -127,7 +135,8 @@ public class Lexicon
         public int hashCode()
         {
             return (lang == null ? 0 : lang.hashCode()) * 647 +
-                    (lemma == null ? 0 : lemma.hashCode()) * 47;
+                    (lemma == null ? 0 : lemma.hashCode()) * 47 +
+                    (originalForm == null ? 0 : originalForm.hashCode()) * 17;
         }
     }
 }
