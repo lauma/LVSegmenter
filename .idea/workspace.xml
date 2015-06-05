@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/FilterTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/wordembeddings/WordEmbeddings.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/wordembeddings/WordEmbeddings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java" />
     </list>
     <ignored path="LVSegmenter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="47" column="35" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
+              <caret line="59" column="19" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -50,23 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WordEmbeddings.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/wordembeddings/WordEmbeddings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Filter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Filter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="143" column="32" selection-start-line="143" selection-start-column="32" selection-end-line="143" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.592">
+              <caret line="112" column="52" selection-start-line="112" selection-start-column="52" selection-end-line="112" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -84,10 +69,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FilterTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FilterTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/FilterTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9066667">
+            <state vertical-scroll-proportion="0.0">
               <caret line="32" column="42" selection-start-line="32" selection-start-column="42" selection-end-line="32" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -100,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="32" selection-end-column="5" />
+              <caret line="32" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="31" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -122,9 +107,13 @@
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="61" column="39" selection-start-line="61" selection-start-column="39" selection-end-line="61" selection-end-column="39" />
+              <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3006#3007#0" expanded="true" />
+                <element signature="e#3038#3039#0" expanded="true" />
+                <element signature="e#3520#3521#0" expanded="true" />
+                <element signature="e#3556#3557#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -161,12 +150,12 @@
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterTest.java" />
         <option value="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java" />
-        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/wordembeddings/WordEmbeddings.java" />
-        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" />
         <option value="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/FilterTest.java" />
+        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java" />
+        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java" />
       </list>
     </option>
   </component>
@@ -309,7 +298,7 @@
       <recent name="lv.ailab.segmenter.tests" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.FilterTest">
+  <component name="RunManager" selected="Application.FilterLV">
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -599,9 +588,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -627,6 +614,10 @@
           <caret line="61" column="39" selection-start-line="61" selection-start-column="39" selection-end-line="61" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3006#3007#0" expanded="true" />
+            <element signature="e#3038#3039#0" expanded="true" />
+            <element signature="e#3520#3521#0" expanded="true" />
+            <element signature="e#3556#3557#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -704,6 +695,10 @@
           <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3006#3007#0" expanded="true" />
+            <element signature="e#3038#3039#0" expanded="true" />
+            <element signature="e#3520#3521#0" expanded="true" />
+            <element signature="e#3556#3557#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -950,13 +945,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.34343433">
           <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="61" column="39" selection-start-line="61" selection-start-column="39" selection-end-line="61" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -974,28 +962,16 @@
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="35" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
+          <caret line="59" column="19" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="67" column="61" selection-start-line="67" selection-start-column="61" selection-end-line="67" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/wordembeddings/WordEmbeddings.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1012,28 +988,52 @@
     <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="32" selection-end-column="5" />
+          <caret line="32" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="31" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/FilterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="42" selection-start-line="32" selection-start-column="42" selection-end-line="32" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="61" selection-start-line="67" selection-start-column="61" selection-end-line="67" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3006#3007#0" expanded="true" />
+            <element signature="e#3038#3039#0" expanded="true" />
+            <element signature="e#3520#3521#0" expanded="true" />
+            <element signature="e#3556#3557#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Filter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="143" column="32" selection-start-line="143" selection-start-column="32" selection-end-line="143" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.592">
+          <caret line="112" column="52" selection-start-line="112" selection-start-column="52" selection-end-line="112" selection-end-column="52" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/FilterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9066667">
-          <caret line="32" column="42" selection-start-line="32" selection-start-column="42" selection-end-line="32" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

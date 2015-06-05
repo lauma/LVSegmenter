@@ -1,5 +1,6 @@
 package lv.ailab.segmenter;
 
+import lv.ailab.segmenter.datastruct.Lexicon;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import java.io.*;
@@ -108,7 +109,8 @@ public class Filter
         {
             countAll++;
             String[] parts = readLine.split("\t");
-            if (isAccepted(parts[0]))
+            if ((Lexicon.generateTranslitVariants(parts[0]).stream().map(var -> isAccepted(var))
+                    .reduce(false, (a, b) -> a ||b)))
             {
                 out.write(readLine);
                 out.newLine();
