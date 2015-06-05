@@ -1,9 +1,6 @@
 package lv.ailab.segmenter.tests;
 
-import static org.junit.Assert.*;
-
 import lv.ailab.segmenter.Filter;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -32,4 +29,12 @@ public class FilterTest
         assertEquals(true, f.isAccepted("l"));
         assertEquals(true, f.isAccepted("v"));
     }
+
+    @Test
+    public void transliteration()
+    {
+        Filter f = new Filter();
+        f.addAllSubstrings("cilvēka");
+    }
+
 }
