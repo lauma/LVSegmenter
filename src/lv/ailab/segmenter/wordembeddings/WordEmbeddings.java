@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.sun.media.jai.rmi.VectorState;
-
 public class WordEmbeddings {
 	private Map<String, double[]> vectors = new HashMap<String, double[]>();
 	int vector_size;

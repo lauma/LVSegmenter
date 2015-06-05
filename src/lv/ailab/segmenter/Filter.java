@@ -37,10 +37,9 @@ public class Filter
      *          given in the input file
      * @throws IOException
      */
-    public static Filter loadFromFile(String wordListFile)
+    public void loadFromFile(String wordListFile)
     throws IOException
     {
-        Filter f = new Filter();
         System.err.println("Loading filter list...");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
@@ -50,20 +49,29 @@ public class Filter
         {
             //if (readLine.startsWith("xn--"))
             //  System.err.println(IDN.toUnicode(readLine));
-            readLine = IDN.toUnicode(readLine, 0);
-            String[] parts = readLine.split("[.-]");
-
-            for (String part : parts)
-                for (int i = 0; i < part.length(); i++)
-                    f.data.put(part.substring(i, part.length()), true);
-
+            addAllSubstrings(readLine);
             if (count % 1000 == 0) System.err.print(count + " loaded.\r");
             readLine = in.readLine();
             count++;
         }
         in.close();
         System.err.println(count + " loaded. Done.");
-        return f;
+        return;
+    }
+
+    /**
+     * Adds one string so that filter can filter against all substrings of this
+     * string.
+     * @param string
+     */
+    public void addAllSubstrings(String string)
+    {
+        string = IDN.toUnicode(string, 0);
+        String[] parts = string.split("[.-]");
+
+        for (String part : parts)
+            for (int i = 0; i < part.length(); i++)
+                data.put(part.substring(i, part.length()), true);
     }
 
     /**
@@ -132,6 +140,8 @@ public class Filter
             System.err.println("\t3) where to put result.");
             return;
         }
-        Filter.loadFromFile(args[0]).filterList(args[1], args[2]);
+        Filter f = new Filter();
+        f.loadFromFile(args[0]);
+        f.filterList(args[1], args[2]);
     }
 }
