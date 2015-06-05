@@ -99,6 +99,8 @@ public class SegmentationResult
             {
                 res.append("{\"Lemma\":\"");
                 res.append(info.lemma);
+                res.append("\", \"Form\":\"");
+                res.append(info.originalForm);
                 res.append("\", \"Source\":\"");
                 res.append(info.lang);
                 res.append("\"}, ");

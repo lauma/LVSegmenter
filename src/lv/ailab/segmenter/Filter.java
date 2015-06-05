@@ -110,7 +110,7 @@ public class Filter
             countAll++;
             String[] parts = readLine.split("\t");
             if ((Lexicon.generateTranslitVariants(parts[0]).stream().map(var -> isAccepted(var))
-                    .reduce(false, (a, b) -> a ||b)))
+                    .reduce(false, (a, b) -> a||b)))
             {
                 out.write(readLine);
                 out.newLine();
