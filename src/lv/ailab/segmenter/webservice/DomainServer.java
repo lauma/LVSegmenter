@@ -52,6 +52,7 @@ public class DomainServer {
         segmenter = new Segmenter (lexicon);
         segmenter.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
         wordembeddings = new WordEmbeddings(EMBEDDINGS_FILENAME);
+        wordembeddings.addToLexicon(lexicon);
         
         // Create a new Restlet component and add a HTTP server connector to it 
 	    Component component = new Component();  

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lv.ailab.segmenter.datastruct.Lexicon;
+
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
@@ -39,24 +41,24 @@ public class DomainNameResource extends ServerResource{
 		return sb.toString();
 	}
 
-	private List<String> buildAlternatives(List<String> segments) throws Exception {		
+	private List<String> buildAlternatives(List<Lexicon.Entry> segments) throws Exception {		
 		List<String> result = new ArrayList<String>();
 		
 		if (segments.size() == 1) {
 			// Option 1 - replace the whole name with possible alternatives
-			result.addAll(DomainServer.wordembeddings.similarWords(segments.get(0), 10));
+			result.addAll(DomainServer.wordembeddings.similarWords(segments.get(0).lemma, 10));
 		} else {
 			// Option 2 - keep all other segments fixed, replace a single word with alternatives
 			for (int i=0; i<segments.size(); i++) {
 				String prefix = "";
 				for (int j=0; j<i; j++) 
-					prefix = prefix + " " + segments.get(j);
+					prefix = prefix + " " + segments.get(j).originalForm;
 				
 				String suffix = "";
 				for (int j=i+1; j<segments.size(); j++)
-					suffix = suffix + " " + segments.get(j);
+					suffix = suffix + " " + segments.get(j).originalForm;
 
-				List<String> replacements = DomainServer.wordembeddings.similarWords(segments.get(i), 10);
+				List<String> replacements = DomainServer.wordembeddings.similarWords(segments.get(i).lemma, 10);
 				for (String replacement : replacements)
 					result.add(prefix.trim() + replacement + suffix.trim());
 
