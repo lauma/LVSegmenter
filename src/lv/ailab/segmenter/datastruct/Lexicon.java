@@ -44,7 +44,7 @@ public class Lexicon
                 String lemma = parts.length > 1 ? parts[1] : parts[0];
                 addWord(form, lemma, lang);
             }
-            if (count % 10000 == 0) System.out.print(count + " loaded.\r");
+            if (count % 10000 == 0) System.err.print(count + " loaded.\r");
             line = in.readLine();
         }
         in.close();

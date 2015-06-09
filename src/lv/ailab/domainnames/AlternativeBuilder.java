@@ -4,8 +4,9 @@ import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 import lv.ailab.wordembeddings.WordEmbeddings;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,6 +39,29 @@ public class AlternativeBuilder
         for (String[] lex : lexiconFiles)
         {
             lexicon.addFromFile(lex[0], lex[1]);
+        }
+        segmenter = new Segmenter(lexicon);
+        segmenter.sortByLanguageChanges = sortByLangChanges;
+        wordembeddings = new WordEmbeddings(embeddingsFile);
+        wordembeddings.addToLexicon(lexicon);
+
+    }
+
+    /**
+     * @param sortByLangChanges flag whether segmenter will use sorting by
+     *                          language changes
+     * @param embeddingsFile    path to embeddings file
+     * @param lexiconFiles      list where each element is in form
+     *                          "lang=lexicon_file"
+     * @throws IOException
+     */
+    public  AlternativeBuilder(boolean sortByLangChanges, String embeddingsFile, String ... lexiconFiles)
+            throws Exception
+    {
+        lexicon = new Lexicon();
+        for (String lex : lexiconFiles)
+        {
+            lexicon.addFromFile(lex.substring(lex.indexOf('=') + 1), lex.substring(0, lex.indexOf('=')));
         }
         segmenter = new Segmenter(lexicon);
         segmenter.sortByLanguageChanges = sortByLangChanges;
@@ -107,6 +131,43 @@ public class AlternativeBuilder
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    public static void main(String[] args)
+    throws Exception
+    {
+        if (args == null || args.length < 4)
+        {
+            System.err.println("To generate alternative names for every line in a file, provide following");
+            System.err.println("arguments:");
+            System.err.println("\tfile_to_process ouput_file word_embeddings_file lang1=wordlist1 lang2=wordlist2");
+            return;
+        }
+        AlternativeBuilder ab = new AlternativeBuilder(
+                true, args[2], Arrays.copyOfRange(args, 3, args.length));
+
+        System.err.println("Processing file...");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(args[0]), "UTF-8"));
+        BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(args[1]), "UTF-8"));
+        String readLine = in.readLine();
+        int count = 0;
+        while (readLine != null)
+        {
+            count++;
+            out.append("\"" + readLine + "\",");
+            out.append(resultToCsv(ab.buildAlternatives(readLine)));
+            if (count % 100 == 0) System.err.print(count + " processed.\r");
+            readLine = in.readLine();
+            if (readLine != null) out.newLine();
+        }
+        System.err.println(count + " processed. Done.");
+        in.close();
+        out.flush();
+        out.close();
+
+
     }
 
 }
