@@ -1,8 +1,8 @@
-package lv.ailab.segmenter.tests;
+package lv.ailab.wordembeddings.tests;
 
 import java.util.Arrays;
 
-import lv.ailab.segmenter.wordembeddings.WordEmbeddings;
+import lv.ailab.wordembeddings.WordEmbeddings;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

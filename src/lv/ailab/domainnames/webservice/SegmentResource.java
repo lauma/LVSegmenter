@@ -1,13 +1,9 @@
-package lv.ailab.segmenter.webservice;
+package lv.ailab.domainnames.webservice;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
+import lv.ailab.domainnames.AlternativeBuilder;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
@@ -21,7 +17,7 @@ public class SegmentResource extends ServerResource{
 			e.printStackTrace();
 		}
 		
-		return DomainServer.segmenter.segment(query).toJSON();
+		return DomainServer.alternatives.segmenter.segment(query).toJSON();
 	}
 
 }

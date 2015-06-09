@@ -1,17 +1,16 @@
-package lv.ailab.segmenter.webservice;
+package lv.ailab.domainnames.webservice;
 
+import lv.ailab.domainnames.AlternativeBuilder;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
-import lv.ailab.segmenter.wordembeddings.WordEmbeddings;
+import lv.ailab.wordembeddings.WordEmbeddings;
 
 import org.restlet.*;
 import org.restlet.data.*;
 
 public class DomainServer {
-	static Lexicon lexicon;
-	static Segmenter segmenter;	
-	static WordEmbeddings wordembeddings;
 	static private int port = 8182;
+	static public AlternativeBuilder alternatives = null;
 
 	public static void main(String[] args) throws Exception {
 //	    String WORDLIST_FILE_LV = "wordlist-lv.txt";
@@ -45,14 +44,8 @@ public class DomainServer {
 				System.exit(0);
 			}
 		} // for .. arguments
-        
-		lexicon = new Lexicon();
-		lexicon.addFromFile(WORDLIST_FILE_LV, "lv");
-		lexicon.addFromFile(WORDLIST_FILE_EN, "en");
-        segmenter = new Segmenter (lexicon);
-        segmenter.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
-        wordembeddings = new WordEmbeddings(EMBEDDINGS_FILENAME);
-        wordembeddings.addToLexicon(lexicon);
+        String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
+		alternatives = new AlternativeBuilder(lexiconFiles, SORT_BY_LANG_CHANGES, EMBEDDINGS_FILENAME);
         
         // Create a new Restlet component and add a HTTP server connector to it 
 	    Component component = new Component();  

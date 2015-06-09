@@ -46,7 +46,8 @@ public class SegmentationResult
 
     /**
      * Currently for test purposes.
-     * @return
+     * @return  List of Lexicon Entries - one for each element of the first
+     *          segmentation.
      */
     public List<Lexicon.Entry> primaryResult() {
 		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
