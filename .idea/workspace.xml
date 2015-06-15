@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java" afterPath="$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java" afterPath="$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="LVSegmenter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,24 +24,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AlternativeBuilder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AlternativeBuilder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.22666667">
+              <caret line="83" column="33" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DomainServer.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.128">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -145,8 +132,8 @@
         <option value="$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainNameResource.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/Lexicon.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
-        <option value="$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java" />
+        <option value="$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java" />
       </list>
     </option>
   </component>
@@ -997,7 +984,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="31" selection-end-column="39" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1114,21 +1101,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java">
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+        <state vertical-scroll-proportion="-1.0053333">
+          <caret line="14" column="59" selection-start-line="14" selection-start-column="59" selection-end-line="14" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/webservice/DomainServer.java">
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.128">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.22666667">
+          <caret line="83" column="33" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

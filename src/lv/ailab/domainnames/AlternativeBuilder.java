@@ -81,6 +81,8 @@ public class AlternativeBuilder
     public List<String> buildAlternatives (String query) throws Exception
     {
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
+        // Filter out separators.
+        segments = segments.stream().filter(a -> !Segmenter.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
         List<String> result = new ArrayList<>();
 
         if (segments.size() == 1)
