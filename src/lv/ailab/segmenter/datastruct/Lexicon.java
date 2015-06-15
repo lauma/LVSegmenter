@@ -67,8 +67,8 @@ public class Lexicon
     }
 
     /**
-     * For a given wordform creates trnsliteration variants - one without
-     * diacrictical marks and one with double letters
+     * For a given wordform creates trnsliteration variants - 1) without
+     * diacrictical marks, 2) with double letters, 3) lowercase
      * @param word wordform to transliterate
      * @return list of transliteration variants, original form included as first
      */
@@ -76,12 +76,17 @@ public class Lexicon
     {
         ArrayList<String> result = new ArrayList<>();
         result.add(word);
-        result.add(StringUtils.replaceChars(word,
-                "āčēģīķļņōŗšūž",
-                "acegiklnorsuz"));
-        result.add(StringUtils.replaceEach(word,
-                new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
-                new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"}));
+        result.add(word.toLowerCase());
+        String tmp = StringUtils.replaceChars(word,
+                "ĀāČčĒēĢģĪīĶķĻļŅņŌōŖŗŠšŪūZž",
+                "AaCcEeGgIiKkLlNnOoRrSsUuZz");
+        result.add(tmp);
+        result.add(tmp.toLowerCase());
+        tmp = StringUtils.replaceEach(word,
+                new String[]{"Ā", "ā", "Č", "č", "Ē", "ē", "Ģ", "ģ", "Ī", "ī", "Ķ", "ķ", "Ļ", "ļ", "Ņ", "ņ", "Ō", "ō", "Ŗ", "ŗ", "Š", "š", "Ū", "ū", "Ž", "ž"},
+                new String[]{"Aa","aa","Ch","ch","Ee","ee","Gj","gj","Ii","ii","Kj","kj","Lj","lj","Nj","nj","Oo","oo","Rj","rj","Sh","sh","Uu","uu","Zh","zh"});
+        result.add(tmp);
+        result.add(tmp.toLowerCase());
         return result;
     }
 

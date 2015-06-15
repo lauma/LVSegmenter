@@ -74,22 +74,25 @@ public class Segmenter
         {
             for (int begin = 0; begin < end; begin++)
             {
-                if (memory.isBegin(begin))
+                String potWord = s.substring(begin, end);
+                List<Lexicon.Entry> found = lexicon.get(potWord);
+                if ((found == null || found.size() < 1) && validSegment
+                        .matcher(potWord).matches())
+                    found = new LinkedList<Lexicon.Entry>()
+                    {{add(new Lexicon.Entry(potWord, potWord, REGEXP));}};
+                if ((found == null || found.size() < 1) && separatorClass
+                        .matcher(potWord).matches())
+                    found = new LinkedList<Lexicon.Entry>()
+                    {{add(new Lexicon.Entry(potWord, potWord, SEPARATOR));}};
+                if (found != null)
                 {
-                    String potWord = s.substring(begin, end);
-                    List<Lexicon.Entry> found = lexicon.get(potWord);
-                    if ((found == null || found.size() < 1) && validSegment.matcher(potWord).matches())
-                        found = new LinkedList<Lexicon.Entry>()
-                            {{add(new Lexicon.Entry(potWord, potWord, REGEXP));}};
-                    if ((found == null || found.size() < 1) && separatorClass.matcher(potWord).matches())
-                        found = new LinkedList<Lexicon.Entry>()
-                            {{add(new Lexicon.Entry(potWord, potWord, SEPARATOR));}};
-                    if (found != null)
+                    if (memory.isBegin(begin))
                     {
                         memory.setBeginValid(end);
                         memory.addWordEntries(potWord, found);
                         memory.makeNextSegmentationVariants(begin, end);
-                    }
+                    } else
+                        memory.addWordEntries(potWord, found);
                 }
             }
         }
