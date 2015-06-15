@@ -70,7 +70,9 @@ public class SegmenterUI
         // Filtering wordlist.
         else if (args.length == 4 && args[0].equals("-filter"))
         {
-            Filter.loadFromFile(args[3]).filterList(args[1], args[2]);
+            Filter f = new Filter();
+            f.loadFromFile(args[3]);
+            f.filterList(args[1], args[2]);
         }
         // Wrong parameters passed or no parameters at all.
         else

@@ -44,26 +44,45 @@ public class Lexicon
                 String lemma = parts.length > 1 ? parts[1] : parts[0];
                 addWord(form, lemma, lang);
             }
-            if (count % 10000 == 0) System.out.print(count + " loaded.\r");
+            if (count % 10000 == 0) System.err.print(count + " loaded.\r");
             line = in.readLine();
         }
         in.close();
         System.err.println(count + " loaded. Done.");
     }
 
+    /**
+     * Add to this lexicon one new wordform.
+     * @param form  wordform to add
+     * @param lemma lemma for this wordform
+     * @param lang  language for this wordform
+     */
     public void addWord(String form, String lemma, String lang)
     {
-        String noDiacritics = StringUtils.replaceChars(form,
-                "āčēģīķļņōŗšūž",
-                "acegiklnorsuz");
-        String transliterated = StringUtils.replaceEach(form,
-                new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
-                new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"});
         Entry e = new Entry (form, lemma, lang);
+        for (String var : generateTranslitVariants(form))
+        {
+            addEntry(var, e);
+        }
+    }
 
-        addEntry(form, e);
-        addEntry(noDiacritics, e);
-        addEntry(transliterated, e);
+    /**
+     * For a given wordform creates trnsliteration variants - one without
+     * diacrictical marks and one with double letters
+     * @param word wordform to transliterate
+     * @return list of transliteration variants, original form included as first
+     */
+    public static List<String>generateTranslitVariants(String word)
+    {
+        ArrayList<String> result = new ArrayList<>();
+        result.add(word);
+        result.add(StringUtils.replaceChars(word,
+                "āčēģīķļņōŗšūž",
+                "acegiklnorsuz"));
+        result.add(StringUtils.replaceEach(word,
+                new String[]{"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž"},
+                new String[]{"aa", "ch", "ee", "gj", "ii", "kj", "lj", "nj", "oo", "rj", "sh", "uu", "zh"}));
+        return result;
     }
 
     public Set<String> getLanguages ()

@@ -1,4 +1,4 @@
-package lv.ailab.segmenter.wordembeddings;
+package lv.ailab.wordembeddings;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

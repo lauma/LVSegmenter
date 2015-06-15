@@ -46,7 +46,8 @@ public class SegmentationResult
 
     /**
      * Currently for test purposes.
-     * @return
+     * @return  List of Lexicon Entries - one for each element of the first
+     *          segmentation.
      */
     public List<Lexicon.Entry> primaryResult() {
 		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
@@ -99,6 +100,8 @@ public class SegmentationResult
             {
                 res.append("{\"Lemma\":\"");
                 res.append(info.lemma);
+                res.append("\", \"Form\":\"");
+                res.append(info.originalForm);
                 res.append("\", \"Source\":\"");
                 res.append(info.lang);
                 res.append("\"}, ");
