@@ -40,7 +40,7 @@ public class Segmenter
      * as seperators, not parts of the segments. Null - no special treatment for
      * any charcter.
      */
-    public Pattern separatorClass = Pattern.compile("[.-:/?=&\\\\]");
+    public Pattern separatorClass = Pattern.compile("[\\-.:/?=&\\\\]");
 
     /**
      * Sorts segmentation results by counting how many pairs of adjacent words
