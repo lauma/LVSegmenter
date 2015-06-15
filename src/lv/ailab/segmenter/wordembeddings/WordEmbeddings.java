@@ -127,7 +127,8 @@ public class WordEmbeddings {
 	
 	public void addToLexicon(Lexicon lex){
 		for (String word : vectors.keySet()) {
-			lex.addWord(word, word, "lv");
+			if (word.length() > 2)
+				lex.addWord(word, word, "lv");
 		}
 	}
 }

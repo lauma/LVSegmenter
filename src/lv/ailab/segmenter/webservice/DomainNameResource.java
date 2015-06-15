@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import lv.ailab.segmenter.datastruct.Lexicon;
 
@@ -34,7 +35,7 @@ public class DomainNameResource extends ServerResource{
 		Iterator<String> i = alternatives.iterator();
 		while (i.hasNext()) {
 			String alternative = i.next();
-			sb.append(alternative);
+			sb.append("\""+alternative+"\"");
 			if (i.hasNext()) sb.append(", ");			
 		}
 		sb.append("]");
@@ -50,18 +51,19 @@ public class DomainNameResource extends ServerResource{
 		} else {
 			// Option 2 - keep all other segments fixed, replace a single word with alternatives
 			for (int i=0; i<segments.size(); i++) {
-				String prefix = "";
-				for (int j=0; j<i; j++) 
-					prefix = prefix + " " + segments.get(j).originalForm;
-				
-				String suffix = "";
-				for (int j=i+1; j<segments.size(); j++)
-					suffix = suffix + " " + segments.get(j).originalForm;
+				String prefix = segments.stream().limit(i).map(a -> a.originalForm).collect(Collectors.joining("-"));
+				String suffix = segments.stream().skip(i+1).map(a -> a.originalForm).collect(Collectors.joining("-"));
 
 				List<String> replacements = DomainServer.wordembeddings.similarWords(segments.get(i).lemma, 10);
-				for (String replacement : replacements)
-					result.add(prefix.trim() + replacement + suffix.trim());
-
+				for (String replacement : replacements) {
+					String alternative = replacement;
+					if (!prefix.trim().isEmpty())
+						alternative = prefix + "-" + alternative;
+					if (!suffix.trim().isEmpty())
+						alternative = alternative + "-" + suffix;
+					
+					result.add(alternative);
+				}
 			}
 		}
 		
