@@ -1,9 +1,6 @@
 package lv.ailab.domainnames.webservice;
 
 import lv.ailab.domainnames.AlternativeBuilder;
-import lv.ailab.segmenter.Segmenter;
-import lv.ailab.segmenter.datastruct.Lexicon;
-import lv.ailab.wordembeddings.WordEmbeddings;
 
 import org.restlet.*;
 import org.restlet.data.*;

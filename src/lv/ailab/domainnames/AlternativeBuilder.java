@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Alternative domain name creator.
@@ -94,7 +95,7 @@ public class AlternativeBuilder
                 String prefix = segments.stream().limit(i).map(a -> a.originalForm).collect(Collectors.joining("-"));
                 String suffix = segments.stream().skip(i+1).map(a -> a.originalForm).collect(Collectors.joining("-"));
 
-                List<String> replacements = DomainServer.wordembeddings.similarWords(segments.get(i).lemma, 10);
+                List<String> replacements = wordembeddings.similarWords(segments.get(i).lemma, 10);
                 for (String replacement : replacements) {
                     String alternative = replacement;
                     if (!prefix.trim().isEmpty())

@@ -18,6 +18,14 @@ import java.net.IDN;
 public class Segmenter
 {
     /**
+     * Language constant for segments recognized as regular expressions.
+     */
+    public static String REGEXP = "regexp";
+    /**
+     * Language constant for segments recognized as separators.
+     */
+    public static String SEPARATOR = "separator";
+    /**
      * Trie-style data structure containing valid words.
      */
     public Lexicon lexicon;
@@ -26,6 +34,13 @@ public class Segmenter
      * lexicon.
      */
     public Pattern validSegment = Pattern.compile("\\d+");
+
+    /**
+     * Regular expression class enlisting all symbols that should be considered
+     * as seperators, not parts of the segments. Null - no special treatment for
+     * any charcter.
+     */
+    public Pattern separatorClass = Pattern.compile("[.-:/?=&\\\\]");
 
     /**
      * Sorts segmentation results by counting how many pairs of adjacent words
@@ -65,7 +80,10 @@ public class Segmenter
                     List<Lexicon.Entry> found = lexicon.get(potWord);
                     if ((found == null || found.size() < 1) && validSegment.matcher(potWord).matches())
                         found = new LinkedList<Lexicon.Entry>()
-                            {{add(new Lexicon.Entry(potWord, potWord, "regexp"));}};
+                            {{add(new Lexicon.Entry(potWord, potWord, REGEXP));}};
+                    if ((found == null || found.size() < 1) && separatorClass.matcher(potWord).matches())
+                        found = new LinkedList<Lexicon.Entry>()
+                            {{add(new Lexicon.Entry(potWord, potWord, SEPARATOR));}};
                     if (found != null)
                     {
                         memory.setBeginValid(end);
