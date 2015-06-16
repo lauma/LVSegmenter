@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java" />
     </list>
     <ignored path="LVSegmenter.iws" />
@@ -82,8 +81,8 @@
       <file leaf-file-name="SegmentationResultWithLang.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.13853905">
-              <caret line="41" column="7" selection-start-line="41" selection-start-column="7" selection-end-line="41" selection-end-column="7" />
+            <state vertical-scroll-proportion="-1.7833753">
+              <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -1116,8 +1115,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.13853905">
-          <caret line="41" column="7" selection-start-line="41" selection-start-column="7" selection-end-line="41" selection-end-column="7" />
+        <state vertical-scroll-proportion="-1.7833753">
+          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
           <folding />
         </state>
       </provider>
