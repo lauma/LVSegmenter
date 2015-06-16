@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.util.List;
 
 import lv.ailab.domainnames.AlternativeBuilder;
+
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
@@ -20,7 +21,18 @@ public class DomainNameResource extends ServerResource{
 			e.printStackTrace();
 		}
 		
-		List<String> alternatives = DomainServer.alternatives.buildAlternatives(query);
+		Integer limit = null;
+		try {
+			String limit_str= getQuery().getValues("limit");
+			System.out.println("limits");
+			System.out.println(limit_str);
+			if (limit_str != null)
+				limit = Integer.parseInt(limit_str);
+		} catch (Exception e) {
+			limit = null;
+		}
+		
+		List<String> alternatives = DomainServer.alternatives.buildAlternatives(query, limit);
 
 		return AlternativeBuilder.resultToJson(alternatives);
 	}
