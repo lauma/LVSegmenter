@@ -14,7 +14,8 @@ public class DomainServer {
 //	    String WORDLIST_FILE_EN = "wordsEn-sil.txt";
 	    String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
 	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
-	    String EMBEDDINGS_FILENAME = "lv_lemmas_70p.out";
+	    String EMBEDDINGS_LV_FILENAME = "lv_lemmas_70p.out";
+	    String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
 	    boolean SORT_BY_LANG_CHANGES = true;
 
 		for (int i=0; i<args.length; i++) {
@@ -42,7 +43,7 @@ public class DomainServer {
 			}
 		} // for .. arguments
         String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
-		alternatives = new AlternativeBuilder(lexiconFiles, SORT_BY_LANG_CHANGES, EMBEDDINGS_FILENAME);
+		alternatives = new AlternativeBuilder(lexiconFiles, SORT_BY_LANG_CHANGES, EMBEDDINGS_LV_FILENAME, EMBEDDINGS_EN_FILENAME);
         
         // Create a new Restlet component and add a HTTP server connector to it 
 	    Component component = new Component();  

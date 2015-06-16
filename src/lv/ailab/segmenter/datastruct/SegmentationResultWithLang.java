@@ -21,6 +21,23 @@ public class SegmentationResultWithLang extends SegmentationResult
         super(original, null, foundWords);
         super.segmentations = segmentations;
     }
+    
+    /**
+     * Currently for test purposes.
+     * @return  List of Lexicon Entries - one for each element of the first
+     *          segmentation.
+     */
+    public List<Lexicon.Entry> primaryResult() {
+		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
+    	if (segmentations.isEmpty()) {
+    		res.add(new Lexicon.Entry(this.original, this.original, "lv"));
+    	} else {
+        	for (String segment : segmentations.get(0).segments) {
+        		res.add(foundWords.get(segment).get(0));
+        	}    		
+    	}
+		return res;
+    }
 
     /**
      * Sort segmentations. Best should be first.
