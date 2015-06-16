@@ -85,15 +85,37 @@ public class AlternativeBuilder
      * Segment the given query and then build alternative names with the help of
      * the word embeddings.
      * @param query input query (domain name)
+     * @param limit cap on how many alternatives are allowed
      * @return  created alternatives (alternative domain names)
      * @throws Exception
      */
-    public List<String> buildAlternatives (String query) throws Exception
+    public List<String> buildAlternatives (String query) throws Exception {
+    	return buildAlternatives(query, null);
+    }
+    
+    /**
+     * Segment the given query and then build alternative names with the help of
+     * the word embeddings.
+     * @param query input query (domain name)
+     * @param limit cap on how many alternatives are allowed
+     * @return  created alternatives (alternative domain names)
+     * @throws Exception
+     */
+    public List<String> buildAlternatives (String query, Integer limit) throws Exception
     {
+        List<String> result = new ArrayList<>();
+        if (query.endsWith(".id")) {
+        	// Workaround for .id.lv subdomains
+    		List<String> alternatives = buildAlternatives(query.substring(0, query.length() - 3), limit);
+    		for (String alternative : alternatives)
+    			result.add(alternative + ".id");
+    		return result;
+    	}
+    	
+    	
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
         // Filter out separators.
         segments = segments.stream().filter(a -> !LangConst.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
-        List<String> result = new ArrayList<>();
 
         if (segments.size() == 1)
         {
@@ -125,6 +147,10 @@ public class AlternativeBuilder
                     result.add(alternative);
                 }                
             }
+        }
+        
+        if (limit != null && limit > 0) {
+        	result = result.stream().limit(limit).collect(Collectors.toList());
         }
         return result;
     }
@@ -173,6 +199,7 @@ public class AlternativeBuilder
                 new InputStreamReader(new FileInputStream(args[0]), "UTF-8"));
         BufferedWriter out = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(args[1]), "UTF-8"));
+        out.append("\"Domēns\",\"Varianti\"\n");
         String readLine = in.readLine();
         int count = 0;
         while (readLine != null)

@@ -36,22 +36,27 @@ public class WordEmbeddings {
         line = in.readLine();
         int count = 0;
         while (line != null) {
-        	count++;
             parts = line.split(" ");
-            if (parts.length != vector_size + 1) {
+            line = in.readLine();
+        	count++;
+
+        	if (parts.length != vector_size + 1) {
             	in.close();
             	throw new Exception(String.format("Error when opening word embedding file %s.\nExpected %d columns in every line, had %d in line #%d", 
             			filename, vector_size, parts.length, count));
-            }
-            
+            }            
             String word = parts[0];
+            
+            // don't include embeddings for numbers etc
+            if (word.matches(".*[0-9].*")) 
+            	continue;
+            
             double[] vector = new double[vector_size];
             for (int i=1; i<parts.length; i++) {
             	vector[i-1] = Double.parseDouble(parts[i]);
             }
             vectors.put(word, vector); 
             if (count % 10000 == 0) System.err.print(count + " loaded.\r");
-            line = in.readLine();
         }
         in.close();
         System.err.println(count + " lines of word embeddings loaded. Done.");
