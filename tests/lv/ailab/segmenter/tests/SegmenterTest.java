@@ -7,42 +7,77 @@ import java.io.IOException;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SegmenterTest {
+/**
+ * Current segmentation tests are designed to be small and independent. Each
+ * test loads its own data into the lexicon and cleanUpAfterTest() method erases
+ * lexicon contents after each test
+ */
+public class SegmenterTest
+{
 	static Lexicon lexicon;
 	static Segmenter segmenter;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws IOException {
-	    String WORDLIST_FILE_LV = "wordlist-lv.txt";
-	    String WORDLIST_FILE_EN = "wordsEn-sil.txt";
-	    boolean SORT_BY_LANG_CHANGES = true;
 
-		lexicon = new Lexicon();
-		lexicon.addFromFile(WORDLIST_FILE_LV, "lv");
-		lexicon.addFromFile(WORDLIST_FILE_EN, "en");
+
+    @Before
+    public void setUpBeforeTest() throws IOException
+    {
+        lexicon = new Lexicon();
         segmenter = new Segmenter (lexicon);
-        segmenter.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
-	}
+        segmenter.sortByLanguageChanges = true;
+    }
+
+    @After
+    public void cleanUpAfterTest() throws IOException
+    {
+        lexicon = null;
+        segmenter = null;
+        segmenter.sortByLanguageChanges = true;
+    }
 	
 	@Test
 	public void sanityCheck() {
-		assertEquals("tests segments", segmenter.segment("testasegments").primaryResultString());
+        lexicon.addWord("testa", "tests", "lv");
+        lexicon.addWord("segments", "segments", "lv");
+        assertEquals("tests segments", segmenter.segment("testasegments").primaryResultString());
 	}
-	
-	@Test
-	public void languages() {
-		assertEquals("king size", segmenter.segment("kingsize").primaryResultString());		 
-		assertEquals("birojs - iekārta", segmenter.segment("biroja-iekartas").primaryResultString());
-	}
+
+    @Test
+    public void resultSorting() {
+        lexicon.addWord("sun", "sun", "en");
+        lexicon.addWord("sun", "Šūns", "lv");
+        lexicon.addWord("city", "city", "en");
+        lexicon.addWord("king", "king", "en");
+        lexicon.addWord("size", "size", "en");
+        lexicon.addWord("size", "sizēt", "lv");
+        assertEquals("sun", segmenter.segment("sun-city").primaryResult().get(0).lemma);
+        assertEquals("en", segmenter.segment("sun-city").primaryResult().get(0).lang);
+        assertEquals("king size", segmenter.segment("kingsize").primaryResultString());
+    }
+    @Test
+    public void length() {
+        lexicon.addWord("biroja", "birojs", "lv");
+        lexicon.addWord("iekartas", "iekārta", "lv");
+        lexicon.addWord("bi", "bi", "lv");
+        lexicon.addWord("roja", "roja", "lv");
+        assertEquals("birojs - iekārta", segmenter.segment("biroja-iekartas").primaryResultString());
+    }
 	
 	@Test
 	public void unicode() {
-		assertEquals("vīns skola", segmenter.segment("xn--vnaskola-9ib").primaryResultString());
+        lexicon.addWord("vīna", "vīns", "lv");
+        lexicon.addWord("skola", "skola", "lv");
+        lexicon.addWord("betonēšana", "betonēt", "lv");
+		assertEquals("vīns skola", segmenter.segment("xn--vnaskola-9ib")
+                .primaryResultString());
 		assertEquals("betonēt", segmenter.segment("xn--betonana-7cb49e").primaryResultString());
 	}
+
+
 
 
 }

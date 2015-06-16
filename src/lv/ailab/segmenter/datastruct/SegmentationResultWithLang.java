@@ -21,7 +21,7 @@ public class SegmentationResultWithLang extends SegmentationResult
         super(original, null, foundWords);
         super.segmentations = segmentations;
     }
-    
+
 
     /**
      * Sort segmentations. Best should be first.
