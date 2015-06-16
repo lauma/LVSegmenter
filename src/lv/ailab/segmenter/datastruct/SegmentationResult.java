@@ -45,12 +45,22 @@ public class SegmentationResult
     }
 
     /**
+     * Sort segmentations by length.
+     */
+    public void sortSegmentations()
+    {
+        segmentations.sort(
+                ((o1, o2) -> new Integer(o1.segments.size()).compareTo(o2.segments.size())));
+    }
+
+    /**
      * Currently for test purposes.
      * @return  List of Lexicon Entries - one for each element of the first
      *          segmentation.
      */
     public List<Lexicon.Entry> primaryResult() {
 		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
+        sortSegmentations();
     	if (segmentations.isEmpty()) {
     		res.add(new Lexicon.Entry(this.original, this.original, "lv"));
     	} else {
@@ -82,6 +92,7 @@ public class SegmentationResult
         res.append("{\n\t\"String\":\"");
         res.append(original);
         res.append("\",\n\t\"SegmentationVariants\":[");
+        sortSegmentations();
         for (SegmentationVariant variant : segmentations)
         {
             res.append("\n\t\t");
