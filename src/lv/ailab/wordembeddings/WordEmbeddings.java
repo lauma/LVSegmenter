@@ -125,10 +125,10 @@ public class WordEmbeddings {
 		return Arrays.asList(result);
 	}
 	
-	public void addToLexicon(Lexicon lex){
+	public void addToLexicon(Lexicon lex, String language){
 		for (String word : vectors.keySet()) {
 			if (word.length() > 2)
-				lex.addWord(word, word, "lv");
+				lex.addWord(word, word, language);
 		}
 	}
 }

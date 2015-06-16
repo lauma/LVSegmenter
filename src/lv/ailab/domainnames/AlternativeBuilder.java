@@ -22,7 +22,14 @@ public class AlternativeBuilder
 {
     public Lexicon lexicon;
     public Segmenter segmenter;
-    public WordEmbeddings wordembeddings;
+    public WordEmbeddings wordembeddings_lv; // TODO - generalize
+    public WordEmbeddings wordembeddings_en;
+    
+    private WordEmbeddings wordembeddings(String language) throws Exception{
+    	if (language.equalsIgnoreCase("lv")) return wordembeddings_lv;
+    	if (language.equalsIgnoreCase("en")) return wordembeddings_en;
+    	throw new Exception(String.format("Wordembeddings - bad language %s", language));
+    }
 
     /**
      * @param lexiconFiles      array of tuples - first element is file path,
@@ -34,7 +41,7 @@ public class AlternativeBuilder
      */
     public  AlternativeBuilder(
             String[][] lexiconFiles, boolean sortByLangChanges,
-            String embeddingsFile)
+            String embeddingsFileLV, String embeddingsFileEN )
     throws Exception
     {
         lexicon = new Lexicon();
@@ -44,9 +51,10 @@ public class AlternativeBuilder
         }
         segmenter = new Segmenter(lexicon);
         segmenter.sortByLanguageChanges = sortByLangChanges;
-        wordembeddings = new WordEmbeddings(embeddingsFile);
-        wordembeddings.addToLexicon(lexicon);
-
+        wordembeddings_lv = new WordEmbeddings(embeddingsFileLV);
+        wordembeddings_lv.addToLexicon(lexicon, "lv");
+        wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
+        wordembeddings_en.addToLexicon(lexicon, "en");
     }
 
     /**
@@ -57,7 +65,7 @@ public class AlternativeBuilder
      *                          "lang=lexicon_file"
      * @throws IOException
      */
-    public  AlternativeBuilder(boolean sortByLangChanges, String embeddingsFile, String ... lexiconFiles)
+    public  AlternativeBuilder(boolean sortByLangChanges, String embeddingsFileLV, String embeddingsFileEN, String ... lexiconFiles)
             throws Exception
     {
         lexicon = new Lexicon();
@@ -67,9 +75,10 @@ public class AlternativeBuilder
         }
         segmenter = new Segmenter(lexicon);
         segmenter.sortByLanguageChanges = sortByLangChanges;
-        wordembeddings = new WordEmbeddings(embeddingsFile);
-        wordembeddings.addToLexicon(lexicon);
-
+        wordembeddings_lv = new WordEmbeddings(embeddingsFileLV);
+        wordembeddings_lv.addToLexicon(lexicon, "lv");
+        wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
+        wordembeddings_en.addToLexicon(lexicon, "en");
     }
 
     /**
@@ -89,16 +98,23 @@ public class AlternativeBuilder
         if (segments.size() == 1)
         {
             // Option 1 - replace the whole name with possible alternatives
-            result.addAll(wordembeddings.similarWords(segments.get(0).lemma, 10));
+        	Lexicon.Entry segment = segments.get(0);
+        	// Non-language segments are kept fixed
+        	if (segment.lang.equalsIgnoreCase("lv") || segment.lang.equalsIgnoreCase("en"))
+        		result.addAll(wordembeddings(segment.lang).similarWords(segment.lemma, 10));
         } else
         {
             // Option 2 - keep all other segments fixed, replace a single word with alternatives
             for (int i=0; i<segments.size(); i++)
             {
+            	Lexicon.Entry segment = segments.get(i);
+            	if (!segment.lang.equalsIgnoreCase("lv") && !segment.lang.equalsIgnoreCase("en"))
+            		continue;// Non-language segments are kept fixed
+            	
                 String prefix = segments.stream().limit(i).map(a -> a.originalForm).collect(Collectors.joining("-"));
                 String suffix = segments.stream().skip(i+1).map(a -> a.originalForm).collect(Collectors.joining("-"));
 
-                List<String> replacements = wordembeddings.similarWords(segments.get(i).lemma, 10);
+                List<String> replacements = wordembeddings(segment.lang).similarWords(segment.lemma, 10);
                 for (String replacement : replacements) {
                     String alternative = replacement;
                     if (!prefix.trim().isEmpty())
@@ -146,11 +162,11 @@ public class AlternativeBuilder
         {
             System.err.println("To generate alternative names for every line in a file, provide following");
             System.err.println("arguments:");
-            System.err.println("\tfile_to_process ouput_file word_embeddings_file lang1=wordlist1 lang2=wordlist2");
+            System.err.println("\tfile_to_process ouput_file word_embeddings_file_lv word_embeddings_file_en lang1=wordlist1 lang2=wordlist2");
             return;
         }
         AlternativeBuilder ab = new AlternativeBuilder(
-                true, args[2], Arrays.copyOfRange(args, 3, args.length));
+                true, args[2], args[3], Arrays.copyOfRange(args, 4, args.length));
 
         System.err.println("Processing file...");
         BufferedReader in = new BufferedReader(
