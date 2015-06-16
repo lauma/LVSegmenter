@@ -1,5 +1,6 @@
 package lv.ailab.domainnames;
 
+import lv.ailab.segmenter.LangConst;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 import lv.ailab.wordembeddings.WordEmbeddings;
@@ -82,7 +83,7 @@ public class AlternativeBuilder
     {
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
         // Filter out separators.
-        segments = segments.stream().filter(a -> !Segmenter.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
+        segments = segments.stream().filter(a -> !LangConst.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
         List<String> result = new ArrayList<>();
 
         if (segments.size() == 1)

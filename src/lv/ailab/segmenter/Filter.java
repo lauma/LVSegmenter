@@ -21,7 +21,7 @@ public class Filter
     /**
      * Minimum word length to be accepted.
      */
-    public static int MINIMUM_LENGTH = 2;
+    public static int MINIMUM_LENGTH = 1;
     /**
      * Data structure with the list of strings to filter against. For each
      * string to filter against, this structure contains subststring(0, length),

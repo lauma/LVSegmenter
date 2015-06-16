@@ -30,9 +30,8 @@ public class SegmentationResultWithLang extends SegmentationResult
         res.append(original);
         res.append("\",\n\t\"SegmentationVariants\":[");
         segmentations.sort((o1, o2) -> {
-            int comp = new Integer(((SegmentationVariantWithLang) o1)
-                    .getMinimumLangCount())
-                    .compareTo(((SegmentationVariantWithLang) o2).getMinimumLangCount());
+            int comp = ((SegmentationVariantWithLang) o1).getBestLangSeqStats().compareTo(
+                    ((SegmentationVariantWithLang) o2).getBestLangSeqStats());
             if (comp == 0)
                 comp = new Integer(((SegmentationVariantWithLang) o1).segments.size())
                         .compareTo(((SegmentationVariantWithLang) o2).segments.size());
@@ -40,13 +39,19 @@ public class SegmentationResultWithLang extends SegmentationResult
         });
         for (SegmentationVariant variant : segmentations)
         {
-            int changes = ((SegmentationVariantWithLang)variant).getMinimumLangCount();
+            //int changes = ((SegmentationVariantWithLang)variant).getMinimumLangCount();
+            LanguageSequence.Stats bestStats = ((SegmentationVariantWithLang)variant).getBestLangSeqStats();
+            List<LanguageSequence> bestLangSeqs = ((SegmentationVariantWithLang)variant).getAllBestLangSeq();
             res.append("\n\t\t{\n\t\t\t\"Segmentation\":");
             res.append(variant.toJSONSegmentList());
             res.append("\n\t\t\t\"LanguageChanges\":");
-            res.append(changes);
+            res.append(bestStats.differences);
+            res.append("\n\t\t\t\"RegexpSegments\":");
+            res.append(bestStats.regExpCount);
+            res.append("\n\t\t\t\"SeparatorSegments\":");
+            res.append(bestStats.separatorCount);
             res.append("\n\t\t\t\"Languages\":[");
-            for (LanguageSequence seq : ((SegmentationVariantWithLang)variant).getLangSequencesByChangeCount(changes))
+            for (LanguageSequence seq : bestLangSeqs)
             {
                 res.append("\n\t\t\t\t");
                 res.append(seq.toJSONLangList());

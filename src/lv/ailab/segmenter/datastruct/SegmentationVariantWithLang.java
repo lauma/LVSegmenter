@@ -16,7 +16,7 @@ public class SegmentationVariantWithLang extends SegmentationVariant
      */
     //protected LinkedList<HashSet<String>> langs = new LinkedList<>();
     protected LinkedList<LanguageSequence> langs = new LinkedList<LanguageSequence>()
-            {{add(new LanguageSequence(new LinkedList<String>(), 0));}};
+            {{add(new LanguageSequence());}};
 
     /**
      * Add next segment with given language(-s) and updates possible language
@@ -76,24 +76,43 @@ public class SegmentationVariantWithLang extends SegmentationVariant
     }
 
     /**
-     * @return  minimal count of language changes (following languages have
-     *          different languages)
+     * Get Stats object for the "best" language sequences according to
+     * LanguageSequence.CountComparator.
      */
-    public int getMinimumLangCount()
+    public LanguageSequence.Stats getBestLangSeqStats()
     {
-        return langs.stream().map(variant -> variant.differences).min(Comparator
-                .naturalOrder()).get();
+        return langs.stream().min(LanguageSequence.CountComparator.get()).get().stats;
     }
 
     /**
+     * Get all language sequences that are as good as the "best" one.
+     */
+    public List<LanguageSequence> getAllBestLangSeq()
+    {
+        LanguageSequence.Stats best = getBestLangSeqStats();
+        return langs.stream().filter(variant -> variant.stats.equals(best))
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * @return  minimal count of language changes (following languages have
+     *          different languages)
+     */
+/*    public int getMinimumLangCount()
+    {
+        return langs.stream().map(variant -> variant.differences).min(Comparator
+                .naturalOrder()).get();
+    }*/
+
+    /*
      * @param changeCount   how many language changes language sequence must
      *                      contain to be included in result
      * @return  language sequences with exactly given language change counts
      */
-    public List<LanguageSequence> getLangSequencesByChangeCount(int changeCount)
+/*    public List<LanguageSequence> getLangSequencesByChangeCount(int changeCount)
     {
         return langs.stream().filter(variant -> variant.differences == changeCount)
                .collect(Collectors.toList());
-    }
+    }*/
 
 }
