@@ -108,24 +108,19 @@ public class Segmenter
                     {{add(new Lexicon.Entry(potWord, potWord, LangConst.SEPARATOR));}};
                 if (found != null)
                 {
-                    if (memory.isValidBegin(begin))
+                    // If found word is a continuation for an existing
+                    // segmentation variant or it is possible to use before it
+                    // nolang "middleman" segment.
+                    if (memory.isValidBegin(begin) ||
+                            allowNolangSegments && makeNolangSegment(begin, memory))
                     {
                         memory.setBeginValid(end);
                         memory.addWordEntries(potWord, begin, found);
                         memory.makeNextSegmentationVariants(begin, end);
                     }
-                    else if (allowNolangSegments)
-                    {
-                        // Update memory for nolang segments.
-                        boolean addCurrentWord = makeNolangSegment(begin, memory);
-                        // Update memory for current segment.
-                        if (addCurrentWord)
-                        {
-                            memory.setBeginValid(end);
-                            memory.addWordEntries(potWord, begin, found);
-                            memory.makeNextSegmentationVariants(begin, end);
-                        }
-                    } else
+                    // If found word can't be a continuation for an existing
+                    // segmentation variant.
+                    else
                         memory.addWordEntries(potWord, begin, found);
                 }
             }

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7ea3245e-29b1-4b3c-9406-de9ca76cd80d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterData.java" afterPath="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterData.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java" afterPath="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java" />
     </list>
     <ignored path="LVSegmenter.iws" />
@@ -62,7 +61,7 @@
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+              <caret line="88" column="91" selection-start-line="88" selection-start-column="91" selection-end-line="88" selection-end-column="91" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -80,24 +79,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Segmenter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Segmenter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="122" column="25" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
+            <state vertical-scroll-proportion="4.667506">
+              <caret line="112" column="50" selection-start-line="112" selection-start-column="50" selection-end-line="112" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SegmenterTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8589421">
-              <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -151,8 +140,8 @@
         <option value="$PROJECT_DIR$/src/lv/ailab/domainnames/AlternativeBuilder.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/SegmenterUI.java" />
         <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterData.java" />
-        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
         <option value="$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java" />
+        <option value="$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java" />
       </list>
     </option>
   </component>
@@ -1079,6 +1068,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResult.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1090,27 +1089,7 @@
     <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmentationResultWithLang.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/datastruct/SegmenterData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="122" column="25" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
+          <caret line="88" column="91" selection-start-line="88" selection-start-column="91" selection-end-line="88" selection-end-column="91" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1119,9 +1098,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/lv/ailab/segmenter/tests/SegmenterTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8589421">
-          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.28967255">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lv/ailab/segmenter/Segmenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.667506">
+          <caret line="112" column="50" selection-start-line="112" selection-start-column="50" selection-end-line="112" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

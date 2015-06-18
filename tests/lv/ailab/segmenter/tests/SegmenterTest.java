@@ -10,7 +10,6 @@ import lv.ailab.segmenter.datastruct.Lexicon;
 import lv.ailab.segmenter.datastruct.SegmentationResult;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -22,7 +21,6 @@ public class SegmenterTest
 {
 	static Lexicon lexicon;
 	static Segmenter segmenter;
-
 
     @Before
     public void setUpBeforeTest() throws IOException
