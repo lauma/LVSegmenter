@@ -94,6 +94,7 @@ public class Segmenter
 
         for (int end = 1; end <= s.length(); end++)
         {
+            //System.out.println(end);
             for (int begin = 0; begin < end; begin++)
             {
                 String potWord = s.substring(begin, end);
@@ -126,8 +127,10 @@ public class Segmenter
             }
 
         }
+        //System.err.println("miip");
         // To allow segmentation end with nolang word.
         if (allowNolangSegments) makeNolangSegment(s.length(), memory);
+        //System.err.println("miip");
         return memory.getResult();
     }
 
@@ -141,7 +144,7 @@ public class Segmenter
      */
     protected boolean makeNolangSegment(int noLangSegmEnd, SegmenterData memory)
     {
-        if (!allowNolangSegments) return false;
+        if (!allowNolangSegments || memory.isValidBegin(noLangSegmEnd)) return false;
         boolean res = false;
         // Here we want to find all recent segmentation endings
         // without including full words as substrings of nonlang
@@ -190,7 +193,7 @@ public class Segmenter
         {
             count++;
             out.append(segment(readLine).toJSON());
-            if (count % 1000 == 0) System.err.print(count + " processed.\r");
+            if (count % 100 == 0) System.err.print(count + " processed.\r");
             readLine = in.readLine();
             if (readLine != null) out.append(",\n");
         }
