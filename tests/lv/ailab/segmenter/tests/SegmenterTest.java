@@ -7,6 +7,7 @@ import java.io.IOException;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 
+import lv.ailab.segmenter.datastruct.SegmentationResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -75,7 +76,16 @@ public class SegmenterTest
 		assertEquals("betonēt", segmenter.segment("xn--betonana-7cb49e").primaryResultString());
 	}
 
-
+    @Test
+    public void nolang()
+    {
+        lexicon.addWord("zeme", "zeme", "lv");
+        lexicon.addWord("size", "size", "en");
+        SegmentationResult res = segmenter.segment("xxsizemeyy");
+        res.sortSegmentations();
+        assertEquals("[\"xxsi\", \"zeme\", \"yy\"]", res.segmentations.get(0).toJSONSegmentList());
+        assertEquals("[\"xx\", \"size\", \"meyy\"]", res.segmentations.get(1).toJSONSegmentList());
+    }
 
 
 }
