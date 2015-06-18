@@ -20,14 +20,6 @@ public class SegmentationResultWithLang extends SegmentationResult
         super(original, null, foundWords, approximatedResult);
         super.segmentations = segmentations;
     }
-    
-    /**
-     * Sort segmentations. Best should be first.
-     */
-    public void sortSegmentations()
-    {
-        segmentations.sort(Comparator.<SegmentationVariant>naturalOrder());
-    }
 
     /**
      * Convinience method - get list of corresponding lexicon entries for the

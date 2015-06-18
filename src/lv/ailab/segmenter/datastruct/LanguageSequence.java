@@ -232,7 +232,7 @@ public class LanguageSequence
     public static class CountComparator implements Comparator<LanguageSequence>
     {
         protected static CountComparator singleton = null;
-        private CountComparator() {};
+        private CountComparator() {}
 
         public static CountComparator get()
         {

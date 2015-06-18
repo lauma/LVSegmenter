@@ -97,13 +97,13 @@ public class Lexicon
 
     public Set<String> getLanguages (String key)
     {
-        List<Entry> entries = data.getOrDefault(key, new LinkedList<Entry>());
+        List<Entry> entries = data.getOrDefault(key, new LinkedList<>());
         return entries.stream().map(e -> e.lang).collect(Collectors.toSet());
     }
 
     public Set<String> getLemmas (String key)
     {
-        List<Entry> entries = data.getOrDefault(key, new LinkedList<Entry>());
+        List<Entry> entries = data.getOrDefault(key, new LinkedList<>());
         return entries.stream().map(e -> e.lemma).collect(Collectors.toSet());
     }
 

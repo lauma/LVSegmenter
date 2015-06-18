@@ -3,7 +3,6 @@ package lv.ailab.segmenter.datastruct;
 import lv.ailab.segmenter.LangConst;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**

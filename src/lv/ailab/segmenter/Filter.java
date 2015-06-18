@@ -34,8 +34,6 @@ public class Filter
     /**
      * Initialize Filter object from a list of strings given in the file.
      * @param wordListFile  path to file with a list of string
-     * @return  Filter objest that can filter against substrings of the strings
-     *          given in the input file
      * @throws IOException
      */
     public void loadFromFile(String wordListFile)
@@ -57,13 +55,11 @@ public class Filter
         }
         in.close();
         System.err.println(count + " loaded. Done.");
-        return;
     }
 
     /**
      * Adds one string so that filter can filter against all substrings of this
      * string.
-     * @param string
      */
     public void addAllSubstrings(String string)
     {
@@ -109,7 +105,7 @@ public class Filter
         {
             countAll++;
             String[] parts = readLine.split("\t");
-            if ((Lexicon.generateTranslitVariants(parts[0]).stream().map(var -> isAccepted(var))
+            if ((Lexicon.generateTranslitVariants(parts[0]).stream().map(this::isAccepted)
                     .reduce(false, (a, b) -> a||b)))
             {
                 out.write(readLine);

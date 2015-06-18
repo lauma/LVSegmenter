@@ -168,7 +168,7 @@ public class Segmenter
             if (memory.isValidBegin(noLangSegmBegin) || noLangSegmBegin == 0)
             {
                 // Update memory for the nolang segment.
-                String nolangSegment = memory.data.substring(noLangSegmBegin, noLangSegmEnd);
+                //String nolangSegment = memory.data.substring(noLangSegmBegin, noLangSegmEnd);
                 //memory.addNolangSegment(nolangSegment);
                 memory.makeNextSegmentationVariants(noLangSegmBegin, noLangSegmEnd);
                 res = true;

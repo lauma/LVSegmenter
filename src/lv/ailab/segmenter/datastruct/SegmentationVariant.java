@@ -1,6 +1,5 @@
 package lv.ailab.segmenter.datastruct;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 
 /**
