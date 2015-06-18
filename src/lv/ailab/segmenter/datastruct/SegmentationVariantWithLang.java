@@ -1,10 +1,13 @@
 package lv.ailab.segmenter.datastruct;
 
+import lv.ailab.segmenter.LangConst;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Segmentation variant augmented with possible languages for each segment.
+ * Natural comparison order might not be consistent with equals() method.
  * Created on 2015-05-12.
  *
  * @author Lauma
@@ -14,9 +17,15 @@ public class SegmentationVariantWithLang extends SegmentationVariant
     /**
      * Languages for respective segments.
      */
-    //protected LinkedList<HashSet<String>> langs = new LinkedList<>();
     protected LinkedList<LanguageSequence> langs = new LinkedList<LanguageSequence>()
             {{add(new LanguageSequence());}};
+
+    /**
+     * Memorized characteristics for currently best language sequence. Do not
+     * use this pointer to access Stats object dirctly, use
+     * getBestLangSeqStats() instead.
+     */
+    protected LanguageSequence.Stats bestLangSeqStats = null;
 
     /**
      * Add next segment with given language(-s) and updates possible language
@@ -32,6 +41,7 @@ public class SegmentationVariantWithLang extends SegmentationVariant
             for (String lang : segmentLangs)
                 nextResults.add(variant.makeNext(lang));
         langs = nextResults;
+        bestLangSeqStats = null;
     }
 
     /**
@@ -81,7 +91,9 @@ public class SegmentationVariantWithLang extends SegmentationVariant
      */
     public LanguageSequence.Stats getBestLangSeqStats()
     {
-        return langs.stream().min(LanguageSequence.CountComparator.get()).get().stats;
+        if (bestLangSeqStats == null)
+            bestLangSeqStats = langs.stream().min(LanguageSequence.CountComparator.get()).get().stats;
+        return bestLangSeqStats;
     }
 
     /**
@@ -94,25 +106,26 @@ public class SegmentationVariantWithLang extends SegmentationVariant
                 .collect(Collectors.toList());
     }
 
-    /*
-     * @return  minimal count of language changes (following languages have
-     *          different languages)
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     * Comparison is done first by Stats object, then by segment count.
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
      */
-/*    public int getMinimumLangCount()
+    @Override
+    public int compareTo(Object o)
     {
-        return langs.stream().map(variant -> variant.differences).min(Comparator
-                .naturalOrder()).get();
-    }*/
-
-    /*
-     * @param changeCount   how many language changes language sequence must
-     *                      contain to be included in result
-     * @return  language sequences with exactly given language change counts
-     */
-/*    public List<LanguageSequence> getLangSequencesByChangeCount(int changeCount)
-    {
-        return langs.stream().filter(variant -> variant.differences == changeCount)
-               .collect(Collectors.toList());
-    }*/
-
+        SegmentationVariantWithLang osv = (SegmentationVariantWithLang) o;
+        int comp = getBestLangSeqStats().compareTo(osv.getBestLangSeqStats());
+        if (comp != 0) return comp;
+        if (segments.size() < osv.segments.size()) return -1;
+        if (segments.size() > osv.segments.size()) return 1;
+        return 0;
+    }
 }

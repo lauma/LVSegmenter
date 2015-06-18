@@ -2,6 +2,7 @@ package lv.ailab.segmenter.datastruct;
 
 import lv.ailab.segmenter.LangConst;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +27,21 @@ public class SegmentationResult
      */
     public Map<String, List<Lexicon.Entry>> foundWords;
 
+    /**
+     * This indicates if somewhere in the segmentation process beam size
+     * restriction have been applied.
+     */
+    public boolean approximatedResult;
+
     public SegmentationResult(String original,
             List<SegmentationVariant> segmentations,
-            Map<String, List<Lexicon.Entry>> foundWords)
+            Map<String, List<Lexicon.Entry>> foundWords,
+            boolean approximatedResult)
     {
         this.original = original;
         this.segmentations = segmentations;
         this.foundWords = foundWords;
+        this.approximatedResult = approximatedResult;
     }
 
     /**
@@ -40,8 +49,8 @@ public class SegmentationResult
      */
     public void sortSegmentations()
     {
-        segmentations.sort(
-                ((o1, o2) -> new Integer(o1.segments.size()).compareTo(o2.segments.size())));
+        segmentations.sort(Comparator.<SegmentationVariant>naturalOrder());
+                //((o1, o2) -> new Integer(o1.segments.size()).compareTo(o2.segments.size())));
     }
 
     /**
@@ -81,6 +90,8 @@ public class SegmentationResult
         StringBuilder res = new StringBuilder();
         res.append("{\n\t\"String\":\"");
         res.append(original);
+        res.append("\",\n\t\"VariantCountReductionUsed\":\"");
+        res.append(approximatedResult);
         res.append("\",\n\t\"SegmentationVariants\":[");
         sortSegmentations();
         for (SegmentationVariant variant : segmentations)

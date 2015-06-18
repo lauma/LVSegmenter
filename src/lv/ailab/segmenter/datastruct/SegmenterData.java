@@ -3,6 +3,8 @@ package lv.ailab.segmenter.datastruct;
 import lv.ailab.segmenter.LangConst;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Data object used for storing data while performing segmentation.
@@ -39,6 +41,11 @@ public class SegmenterData
      */
     protected Map<String, List<Lexicon.Entry>> foundWords;
 
+    /**
+     * This indicates if beam size restrictions have been applied.
+     */
+    protected boolean trimmed = false;
+
     public SegmenterData (String data)
     {
         this.data = data;
@@ -56,8 +63,17 @@ public class SegmenterData
         dynamicTable.set(0, true);
     }
 
+    public void discardWorst(int stepIndex, int beamSize)
+    {
+        if (beamSize < 1 || memorizedVariants.get(stepIndex).size() <= beamSize)
+            return;
+        memorizedVariants.set(stepIndex,
+                memorizedVariants.get(stepIndex).stream().sorted().limit(beamSize).collect(Collectors.toList()));
+        trimmed = true;
+    }
+
     /**
-     * Checks if given index is valid begining of the new word.
+     * Checks if given index is valid beginning of the new word.
      * @param index index to check (starting with 0)
      * @return does the substring(0, index) has a valid segmentation
      */
@@ -76,7 +92,7 @@ public class SegmenterData
     }
 
     /**
-     * Checks if there is a word beggining at this position. If there is one,
+     * Checks if there is a word beginning at this position. If there is one,
      * returns its length. If there is multiple, returns shortest length. If
      * there is none, returns 0.
      * @param index index to check (starting with 0)
@@ -137,6 +153,6 @@ public class SegmenterData
      */
     public SegmentationResult getResult()
     {
-        return new SegmentationResult(data, memorizedVariants.get(data.length()), foundWords);
+        return new SegmentationResult(data, memorizedVariants.get(data.length()), foundWords, trimmed);
     }
 }

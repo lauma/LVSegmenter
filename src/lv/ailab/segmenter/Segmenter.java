@@ -48,6 +48,12 @@ public class Segmenter
     public boolean allowNolangSegments = false;
 
     /**
+     * If in any step there are more than this much segmentation variants, only
+     * this much best variants are kept. No filtering is done, if beamSize < 1.
+     */
+    public int beamSize = 500;
+
+    /**
      * Creates Segmenter with all time consuming optional features enabled.
      * @param l lexicont to initialize Segmenter with
      */
@@ -94,7 +100,6 @@ public class Segmenter
 
         for (int end = 1; end <= s.length(); end++)
         {
-            //System.out.println(end);
             for (int begin = 0; begin < end; begin++)
             {
                 String potWord = s.substring(begin, end);
@@ -125,12 +130,11 @@ public class Segmenter
                         memory.addWordEntries(potWord, begin, found);
                 }
             }
+            memory.discardWorst(end, beamSize);
 
         }
-        //System.err.println("miip");
         // To allow segmentation end with nolang word.
         if (allowNolangSegments) makeNolangSegment(s.length(), memory);
-        //System.err.println("miip");
         return memory.getResult();
     }
 
@@ -165,7 +169,7 @@ public class Segmenter
             {
                 // Update memory for the nolang segment.
                 String nolangSegment = memory.data.substring(noLangSegmBegin, noLangSegmEnd);
-                memory.addNolangSegment(nolangSegment);
+                //memory.addNolangSegment(nolangSegment);
                 memory.makeNextSegmentationVariants(noLangSegmBegin, noLangSegmEnd);
                 res = true;
             }
@@ -192,7 +196,8 @@ public class Segmenter
         while (readLine != null)
         {
             count++;
-            out.append(segment(readLine).toJSON());
+            SegmentationResult res = segment(readLine);
+            out.append(res.toJSON());
             if (count % 100 == 0) System.err.print(count + " processed.\r");
             readLine = in.readLine();
             if (readLine != null) out.append(",\n");

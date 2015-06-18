@@ -2,10 +2,7 @@ package lv.ailab.segmenter.datastruct;
 
 import lv.ailab.segmenter.LangConst;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Segmentation results augumented with segment language data.
@@ -17,9 +14,10 @@ public class SegmentationResultWithLang extends SegmentationResult
 {
     public SegmentationResultWithLang(String original,
             List<SegmentationVariantWithLang> segmentations,
-            Map<String, List<Lexicon.Entry>> foundWords)
+            Map<String, List<Lexicon.Entry>> foundWords,
+            boolean approximatedResult)
     {
-        super(original, null, foundWords);
+        super(original, null, foundWords, approximatedResult);
         super.segmentations = segmentations;
     }
     
@@ -28,14 +26,7 @@ public class SegmentationResultWithLang extends SegmentationResult
      */
     public void sortSegmentations()
     {
-        segmentations.sort((o1, o2) -> {
-            int comp = ((SegmentationVariantWithLang) o1).getBestLangSeqStats().compareTo(
-                    ((SegmentationVariantWithLang) o2).getBestLangSeqStats());
-            if (comp == 0)
-                comp = new Integer(((SegmentationVariantWithLang) o1).segments.size())
-                        .compareTo(((SegmentationVariantWithLang) o2).segments.size());
-            return comp;
-        });
+        segmentations.sort(Comparator.<SegmentationVariant>naturalOrder());
     }
 
     /**
@@ -81,6 +72,8 @@ public class SegmentationResultWithLang extends SegmentationResult
         StringBuilder res = new StringBuilder();
         res.append("{\n\t\"String\":\"");
         res.append(original);
+        res.append("\",\n\t\"VariantCountReductionUsed\":\"");
+        res.append(approximatedResult);
         res.append("\",\n\t\"SegmentationVariants\":[");
         sortSegmentations();
         for (SegmentationVariant variant : segmentations)

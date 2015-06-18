@@ -1,5 +1,8 @@
 package lv.ailab.segmenter.datastruct;
 
+import lv.ailab.segmenter.LangConst;
+
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -35,9 +38,10 @@ public class SegmenterDataWithLang extends SegmenterData
         else for (SegmentationVariant variant: memorizedVariants.get(from))
         {
             SegmentationVariantWithLang newVariant =
-                    ((SegmentationVariantWithLang)variant).makeNext(
-                            word, foundWords.get(word)
-                                    .stream().map(entry -> entry.lang).collect(Collectors.toSet()));
+                    ((SegmentationVariantWithLang)variant).makeNext(word,
+                            foundWords.containsKey(word) ?
+                                    foundWords.get(word).stream().map(entry -> entry.lang).collect(Collectors.toSet()) :
+                                    new HashSet<String>(){{add(LangConst.NOLANG);}});
             memorizedVariants.get(to).add(newVariant);
         }
     }
@@ -51,6 +55,6 @@ public class SegmenterDataWithLang extends SegmenterData
                 data,
                 memorizedVariants.get(data.length()).stream().map(
                         variant -> (SegmentationVariantWithLang)variant).collect(Collectors.toList()),
-                foundWords);
+                foundWords, trimmed);
     }
 }
