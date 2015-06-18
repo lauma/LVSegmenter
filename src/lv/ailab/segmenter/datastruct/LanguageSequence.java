@@ -1,6 +1,5 @@
 package lv.ailab.segmenter.datastruct;
 
-import com.sun.istack.internal.NotNull;
 import lv.ailab.segmenter.LangConst;
 
 import java.util.Comparator;
