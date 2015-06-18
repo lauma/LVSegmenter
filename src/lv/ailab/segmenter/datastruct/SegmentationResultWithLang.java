@@ -96,6 +96,8 @@ public class SegmentationResultWithLang extends SegmentationResult
             res.append(bestStats.regExpCount);
             res.append("\n\t\t\t\"SeparatorSegments\":");
             res.append(bestStats.separatorCount);
+            res.append("\n\t\t\t\"OOVSegments\":");
+            res.append(bestStats.nolangCount);
             res.append("\n\t\t\t\"Languages\":[");
             for (LanguageSequence seq : bestLangSeqs)
             {

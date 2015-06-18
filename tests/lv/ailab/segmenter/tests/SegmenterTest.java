@@ -85,5 +85,17 @@ public class SegmenterTest
         assertEquals("[\"xx\", \"size\", \"meyy\"]", res.segmentations.get(1).toJSONSegmentList());
     }
 
+    @Test
+    public void nolangSorting()
+    {
+        lexicon.addWord("zeme", "zeme", "lv");
+        lexicon.addWord("size", "size", "en");
+        lexicon.addWord("me", "me", "es");
+        SegmentationResult res = segmenter.segment("sizeme");
+        res.sortSegmentations();
+        assertEquals("[\"size\", \"me\"]", res.segmentations.get(0).toJSONSegmentList());
+        assertEquals("[\"si\", \"zeme\"]", res.segmentations.get(1).toJSONSegmentList());
+    }
+
 
 }

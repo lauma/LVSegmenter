@@ -34,11 +34,12 @@ public class LanguageSequence
      * @param differences       precalculated language change count
      * @param separatorCount    precalculated seperator count
      * @param regExpCount       precalculated regexp count
+     * @param nolangCount       precalculated OOV segment count
      */
     protected LanguageSequence(
-            List<String> langs, int differences, int separatorCount, int regExpCount)
+            List<String> langs, int differences, int separatorCount, int regExpCount, int nolangCount)
     {
-        this.stats = new Stats(differences, separatorCount, regExpCount);
+        this.stats = new Stats(differences, separatorCount, regExpCount, nolangCount);
         this.langs = new LinkedList<String>(){{addAll(langs);}};
     }
 
@@ -59,7 +60,8 @@ public class LanguageSequence
     {
         this.stats = new Stats(0,
                 LangConst.SEPARATOR.equals(firstLang) ? 1 : 0,
-                LangConst.REGEXP.equals(firstLang) ? 1 : 0);
+                LangConst.REGEXP.equals(firstLang) ? 1 : 0,
+                LangConst.NOLANG.equals(firstLang) ? 1 : 0);
         this.langs = new LinkedList<String>(){{add(firstLang);}};
     }
 
@@ -72,7 +74,8 @@ public class LanguageSequence
     public LanguageSequence makeNext (String nextLang)
     {
         LanguageSequence res = new LanguageSequence(
-                langs, stats.differences, stats.separatorCount, stats.regExpCount);
+                langs, stats.differences, stats.separatorCount,
+                stats.regExpCount, stats.nolangCount);
         res.addNext(nextLang);
         return res;
     }
@@ -88,6 +91,8 @@ public class LanguageSequence
             stats.separatorCount++;
         else if (LangConst.REGEXP.equals(nextLang))
             stats.regExpCount++;
+        else if (LangConst.NOLANG.equals(nextLang))
+            stats.nolangCount++;
         else
         {
             String prevRealLang = null;
@@ -136,15 +141,23 @@ public class LanguageSequence
         public int separatorCount;
 
         /**
-         * Count of the elements with language LangConst.REGEXP. Used for sorting.
+         * Count of the elements with language LangConst.REGEXP. Used for
+         * sorting.
          */
         public int regExpCount;
 
-        public Stats(int differences, int separatorCount, int regExpCount)
+        /**
+         * Count of the elements with language LangConst.NOLANG. Used for
+         * sorting.
+         */
+        public int nolangCount;
+
+        public Stats(int differences, int separatorCount, int regExpCount, int nolangCount)
         {
             this.differences = differences;
             this.separatorCount = separatorCount;
             this.regExpCount = regExpCount;
+            this.nolangCount = nolangCount;
         }
 
         public Stats()
@@ -152,6 +165,7 @@ public class LanguageSequence
             this.differences = 0;
             this.separatorCount = 0;
             this.regExpCount = 0;
+            nolangCount = 0;
         }
 
         @Override
@@ -164,7 +178,8 @@ public class LanguageSequence
                 Stats os = (Stats) o;
                 return ((differences == os.differences) &&
                         (separatorCount == os.separatorCount) &&
-                        (regExpCount == os.regExpCount));
+                        (regExpCount == os.regExpCount) &&
+                        (nolangCount == os.nolangCount));
             } catch (ClassCastException e)
             {
                 return false;
@@ -174,7 +189,7 @@ public class LanguageSequence
         @Override
         public int hashCode()
         {
-            return differences * 787 + separatorCount * 97 + regExpCount * 7;
+            return differences * 787 + separatorCount * 97 + regExpCount * 7 + nolangCount * 797;
         }
 
         /**
@@ -194,16 +209,18 @@ public class LanguageSequence
         {
 
             Stats os = (Stats) o;
+            if (nolangCount < os.nolangCount) return -1;
+            if (nolangCount > os.nolangCount) return 1;
+            // if (nolangCount == os.nolangCount)
             if (differences < os.differences) return -1;
             if (differences > os.differences) return 1;
             // if (differences == os.differences)
             if (regExpCount < os.regExpCount) return -1;
             if (regExpCount > os.regExpCount) return 1;
-            // if (differences == os.differences && regExpCount == os.regExpCount)
+            // if (regExpCount == os.regExpCount)
             if (separatorCount < os.separatorCount) return -1;
             if (separatorCount > os.separatorCount) return 1;
-            // if (differences == os.differences && regExpCount == os.regExpCount
-            //      && separatorCount == os.separatorCount)
+            // if (separatorCount == os.separatorCount)
             return 0;
         }
     }
