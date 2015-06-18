@@ -27,8 +27,7 @@ public class SegmenterTest
     public void setUpBeforeTest() throws IOException
     {
         lexicon = new Lexicon();
-        segmenter = new Segmenter (lexicon);
-        segmenter.sortByLanguageChanges = true;
+        segmenter = Segmenter.fullFunctionalitySegmenter (lexicon);
     }
 
     @After
@@ -36,7 +35,6 @@ public class SegmenterTest
     {
         lexicon = null;
         segmenter = null;
-        segmenter.sortByLanguageChanges = true;
     }
 	
 	@Test

@@ -21,7 +21,8 @@ public class DomainNamesTest {
 	    String EMBEDDINGS_LV_FILENAME = "lv_lemmas_70p.out";
 	    String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
 	    String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
-	    alternativebuilder = new AlternativeBuilder(lexiconFiles, true, EMBEDDINGS_LV_FILENAME, EMBEDDINGS_EN_FILENAME);
+	    alternativebuilder = new AlternativeBuilder(
+				lexiconFiles, true, true, EMBEDDINGS_LV_FILENAME, EMBEDDINGS_EN_FILENAME);
 	}
 
 	@Test

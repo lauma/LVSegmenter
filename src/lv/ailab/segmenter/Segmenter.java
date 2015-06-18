@@ -42,7 +42,37 @@ public class Segmenter
     public boolean sortByLanguageChanges = false;
 
     /**
-     * Initialize Segmenter from a given lexicon.
+     * Allows segments not conforming any segment verification method (OOV,
+     * regexp, separators).
+     */
+    public boolean allowNolangSegments = false;
+
+    /**
+     * Creates Segmenter with all time consuming optional features enabled.
+     * @param l lexicont to initialize Segmenter with
+     */
+    public static Segmenter fullFunctionalitySegmenter (Lexicon l)
+    {
+        Segmenter res = new Segmenter(l);
+        res.allowNolangSegments = true;
+        res.sortByLanguageChanges = true;
+        return res;
+    }
+
+    /**
+     * Creates segmenter with all time consuming optional features disabled.
+     * @param l lexicont to initialize Segmenter with
+     */
+    public static Segmenter fastSegmenter (Lexicon l)
+    {
+        Segmenter res = new Segmenter(l);
+        res.allowNolangSegments = false;
+        res.sortByLanguageChanges = false;
+        return res;
+    }
+
+    /**
+     * Initialize Segmenter from a given lexicon and default flags.
      */
     public Segmenter (Lexicon l)
     {
@@ -83,10 +113,52 @@ public class Segmenter
                         memory.setBeginValid(end);
                         memory.addWordEntries(potWord, found);
                         memory.makeNextSegmentationVariants(begin, end);
+                    }
+                    else if (allowNolangSegments)
+                    {
+                        // Find where the previous word ends.
+                        int noLangBegin = begin - 1;
+                        while (noLangBegin > 0 && !memory.isBegin(noLangBegin))
+                            noLangBegin--;
+
+                        // Create entry for nolang string.
+                        String nolangSegment = s.substring(noLangBegin, begin);
+                        Lexicon.Entry nolangEntry = new Lexicon.Entry(nolangSegment, nolangSegment, LangConst.NOLANG);
+
+                        // Update memory for the nolang segment.
+                        //memory.setBeginValid(begin);  // If this is comented out, consecutive nolang segments are not allowed.
+                        memory.addWordEntries(nolangSegment,
+                                new ArrayList<Lexicon.Entry>(1) {{add(nolangEntry);}});
+                        memory.makeNextSegmentationVariants(noLangBegin, begin);
+
+                        // Update memory for curent segment.
+                        memory.setBeginValid(end);
+                        memory.addWordEntries(potWord, found);
+                        memory.makeNextSegmentationVariants(begin, end);
+
                     } else
                         memory.addWordEntries(potWord, found);
                 }
             }
+
+        }
+        // To allow segmentation end with nolang word.
+        if (allowNolangSegments)
+        {
+            // Find where the previous word ends.
+            int noLangBegin = s.length() - 1;
+            //for (noLangBegin = end - 1; noLangBegin >= 0 && )
+            while (noLangBegin > 0 && !memory.isBegin(noLangBegin))
+                noLangBegin--;
+
+            // Create entry for nolang string.
+            String nolangSegment = s.substring(noLangBegin, s.length());
+            Lexicon.Entry nolangEntry = new Lexicon.Entry(nolangSegment, nolangSegment, LangConst.NOLANG);
+
+            // Update memory for the nolang segment.
+            memory.addWordEntries(nolangSegment,
+                    new ArrayList<Lexicon.Entry>(1) {{add(nolangEntry);}});
+            memory.makeNextSegmentationVariants(noLangBegin, s.length());
         }
         return memory.getResult();
     }

@@ -36,11 +36,12 @@ public class AlternativeBuilder
      *                          second element is language stub
      * @param sortByLangChanges flag whether segmenter will use sorting by
      *                          language changes
-     * @param embeddingsFile    path to embeddings file
+     * @param embeddingsFileLV  path to 1st embeddings file
+     * @param embeddingsFileEN  path to 2nd embeddings file
      * @throws IOException
      */
     public  AlternativeBuilder(
-            String[][] lexiconFiles, boolean sortByLangChanges,
+            String[][] lexiconFiles, boolean sortByLangChanges, boolean allowNolang,
             String embeddingsFileLV, String embeddingsFileEN )
     throws Exception
     {
@@ -51,6 +52,7 @@ public class AlternativeBuilder
         }
         segmenter = new Segmenter(lexicon);
         segmenter.sortByLanguageChanges = sortByLangChanges;
+        segmenter.allowNolangSegments = allowNolang;
         wordembeddings_lv = new WordEmbeddings(embeddingsFileLV);
         wordembeddings_lv.addToLexicon(lexicon, "lv");
         wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
@@ -60,12 +62,15 @@ public class AlternativeBuilder
     /**
      * @param sortByLangChanges flag whether segmenter will use sorting by
      *                          language changes
-     * @param embeddingsFile    path to embeddings file
+     * @param embeddingsFileLV  path to 1st embeddings file
+     * @param embeddingsFileEN  path to 2nd embeddings file
      * @param lexiconFiles      list where each element is in form
      *                          "lang=lexicon_file"
      * @throws IOException
      */
-    public  AlternativeBuilder(boolean sortByLangChanges, String embeddingsFileLV, String embeddingsFileEN, String ... lexiconFiles)
+    public  AlternativeBuilder(
+            boolean sortByLangChanges, boolean allowNolang,
+            String embeddingsFileLV, String embeddingsFileEN, String ... lexiconFiles)
             throws Exception
     {
         lexicon = new Lexicon();
@@ -75,6 +80,7 @@ public class AlternativeBuilder
         }
         segmenter = new Segmenter(lexicon);
         segmenter.sortByLanguageChanges = sortByLangChanges;
+        segmenter.allowNolangSegments = allowNolang;
         wordembeddings_lv = new WordEmbeddings(embeddingsFileLV);
         wordembeddings_lv.addToLexicon(lexicon, "lv");
         wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
@@ -85,7 +91,6 @@ public class AlternativeBuilder
      * Segment the given query and then build alternative names with the help of
      * the word embeddings.
      * @param query input query (domain name)
-     * @param limit cap on how many alternatives are allowed
      * @return  created alternatives (alternative domain names)
      * @throws Exception
      */
@@ -192,7 +197,7 @@ public class AlternativeBuilder
             return;
         }
         AlternativeBuilder ab = new AlternativeBuilder(
-                true, args[2], args[3], Arrays.copyOfRange(args, 4, args.length));
+                true, true, args[2], args[3], Arrays.copyOfRange(args, 4, args.length));
 
         System.err.println("Processing file...");
         BufferedReader in = new BufferedReader(

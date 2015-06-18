@@ -13,7 +13,7 @@ public class SegmenterUI
 {
     public static String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
     public static String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
-    public static boolean SORT_BY_LANG_CHANGES = true;
+    public static boolean FAST_SEGMENTATION = false;
 
     /**
      * Run Segmenter or Filter tools. To get usage info, provide no parameters.
@@ -27,8 +27,8 @@ public class SegmenterUI
             Lexicon l = new Lexicon();
             l.addFromFile(WORDLIST_FILE_LV, "lv");
             l.addFromFile(WORDLIST_FILE_EN, "en");
-            Segmenter s = new Segmenter (l);
-            s.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
+            Segmenter s = FAST_SEGMENTATION ?
+                    Segmenter.fastSegmenter(l) : Segmenter.fullFunctionalitySegmenter(l);
             long beginTime = System.nanoTime();
             String res = s.segment(args[0]).toJSON();
             long endTime = System.nanoTime();
@@ -42,7 +42,8 @@ public class SegmenterUI
             Lexicon l = new Lexicon();
             for (int i = 1; i < args.length; i++)
                 l.addFromFile(args[i].substring(args[i].indexOf('=') + 1), args[i].substring(0, args[i].indexOf('=')));
-            Segmenter s = new Segmenter (l);
+            Segmenter s = FAST_SEGMENTATION ?
+                    Segmenter.fastSegmenter(l) : Segmenter.fullFunctionalitySegmenter(l);
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
             String line = in.readLine();
             while (line!= null && !line.equals(""))
@@ -60,8 +61,8 @@ public class SegmenterUI
             Lexicon l = new Lexicon();
             for (int i = 3; i < args.length; i++)
                 l.addFromFile(args[i].substring(args[i].indexOf('=') + 1), args[i].substring(0, args[i].indexOf('=')));
-            Segmenter s = new Segmenter(l);
-            s.sortByLanguageChanges = SORT_BY_LANG_CHANGES;
+            Segmenter s = FAST_SEGMENTATION ?
+                    Segmenter.fastSegmenter(l) : Segmenter.fullFunctionalitySegmenter(l);
             long beginTime = System.nanoTime();
             s.segmentFile(args[1], args[2]);
             long endTime = System.nanoTime();
