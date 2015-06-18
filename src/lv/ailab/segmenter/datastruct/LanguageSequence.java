@@ -1,5 +1,6 @@
 package lv.ailab.segmenter.datastruct;
 
+import com.sun.istack.internal.NotNull;
 import lv.ailab.segmenter.LangConst;
 
 import java.util.Comparator;
@@ -47,7 +48,7 @@ public class LanguageSequence
     public LanguageSequence()
     {
         this.stats = new Stats();
-        this.langs = new LinkedList<String>();
+        this.langs = new LinkedList<>();
     }
 
     /**
@@ -157,7 +158,7 @@ public class LanguageSequence
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (this == null || o == null) return false;
+            if (o == null) return false;
             try
             {
                 Stats os = (Stats) o;
@@ -216,6 +217,7 @@ public class LanguageSequence
     {
         protected static CountComparator singleton = null;
         private CountComparator() {};
+
         public static CountComparator get()
         {
             if (singleton == null) singleton = new CountComparator();

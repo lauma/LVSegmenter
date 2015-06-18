@@ -143,7 +143,7 @@ public class Lexicon
         public boolean equals(Object o)
         {
             if (this == o) return true;
-            if (this == null || o == null) return false;
+            if (o == null) return false;
             try
             {
                 Entry oe = (Entry) o;

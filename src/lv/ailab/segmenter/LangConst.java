@@ -16,4 +16,9 @@ public final class LangConst
      * Language constant for segments recognized as separators.
      */
     public final static String SEPARATOR = "separator";
+
+    /**
+     * Language constant for OOV segments that are none of above.
+     */
+    public final static String NOLANG ="nolang";
 }

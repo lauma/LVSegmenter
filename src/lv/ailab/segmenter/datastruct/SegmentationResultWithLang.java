@@ -1,10 +1,11 @@
 package lv.ailab.segmenter.datastruct;
 
+import lv.ailab.segmenter.LangConst;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Segmentation results augumented with segment language data.
@@ -21,8 +22,7 @@ public class SegmentationResultWithLang extends SegmentationResult
         super(original, null, foundWords);
         super.segmentations = segmentations;
     }
-
-
+    
     /**
      * Sort segmentations. Best should be first.
      */
@@ -39,8 +39,9 @@ public class SegmentationResultWithLang extends SegmentationResult
     }
 
     /**
-     * Currently for test purposes. Takes one of the best segmentations and
-     * matches it with one of the best language sequences.
+     * Convinience method - get list of corresponding lexicon entries for the
+     * one of the best segmentations (according to language changes, segment
+     * count etc.). Or get original string, if no segmentation.
      * @return  List of Lexicon Entries - one for each element of the first
      *          segmentation.
      */
@@ -49,7 +50,7 @@ public class SegmentationResultWithLang extends SegmentationResult
         List<Lexicon.Entry> res = new LinkedList<>();
         sortSegmentations();
         if (segmentations.isEmpty())
-            res.add(new Lexicon.Entry(this.original, this.original, "lv"));
+            res.add(new Lexicon.Entry(this.original, this.original, LangConst.NOLANG));
         else
         {
             SegmentationVariantWithLang primRes = (SegmentationVariantWithLang) segmentations.get(0);
@@ -63,7 +64,8 @@ public class SegmentationResultWithLang extends SegmentationResult
                 if (matched.isPresent())
                     res.add(matched.get());
                 else
-                    throw new IllegalStateException("Segmentation fragment and language matching error. Probably fatal code flaw!");
+                    throw new IllegalStateException(
+                            "Segmentation fragment and language matching error. Probably fatal code flaw!");
             }
         }
         return res;

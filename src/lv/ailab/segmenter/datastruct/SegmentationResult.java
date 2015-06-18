@@ -1,8 +1,11 @@
 package lv.ailab.segmenter.datastruct;
 
+import lv.ailab.segmenter.LangConst;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Container object representing Segmenter's results.
@@ -23,18 +26,6 @@ public class SegmentationResult
      */
     public Map<String, List<Lexicon.Entry>> foundWords;
 
-    /*public void sortSegByLangs()
-    {
-        segmentations.sort(new Comparator<ArrayList<String>>() {
-            @Override
-            public int compare(ArrayList<String> o1, ArrayList<String> o2)
-            {
-                HashSet<String>
-                return 0;
-            }
-        });
-    }*/
-
     public SegmentationResult(String original,
             List<SegmentationVariant> segmentations,
             Map<String, List<Lexicon.Entry>> foundWords)
@@ -54,33 +45,32 @@ public class SegmentationResult
     }
 
     /**
-     * Currently for test purposes.
+     * Convinience method - get list of corresponding lexicon enstries for the
+     * shortest segmentation. Or get original string, if no segmentation.
      * @return  List of Lexicon Entries - one for each element of the first
      *          segmentation.
      */
-    public List<Lexicon.Entry> primaryResult() {
-		List<Lexicon.Entry> res = new LinkedList<Lexicon.Entry>();
+    public List<Lexicon.Entry> primaryResult()
+    {
+		List<Lexicon.Entry> res = new LinkedList<>();
         sortSegmentations();
-    	if (segmentations.isEmpty()) {
-    		res.add(new Lexicon.Entry(this.original, this.original, "lv"));
-    	} else {
-        	for (String segment : segmentations.get(0).segments) {
-        		res.add(foundWords.get(segment).get(0));
-        	}    		
-    	}
+    	if (segmentations.isEmpty())
+            res.add(new Lexicon.Entry(this.original, this.original, LangConst.NOLANG));
+        else res.addAll(segmentations.get(0).segments.stream()
+                .map(segment -> foundWords.get(segment).get(0))
+                .collect(Collectors.toList()));
 		return res;
     }
     
     /**
-     * Currently for test purposes.
-     * @return
+     * Convinience method - get space separated string representation of the
+     * primaryResult().
      */
-    public String primaryResultString() {
-    	List<String> res = new LinkedList<String>();
-    	for (Lexicon.Entry entry : primaryResult()) {
-    		res.add(entry.lemma);
-    	}
-    	return String.join(" ", res);
+    public String primaryResultString()
+    {
+    	List<String> res = primaryResult().stream().map(entry -> entry.lemma)
+                .collect(Collectors.toList());
+        return String.join(" ", res);
     }
 
     /**

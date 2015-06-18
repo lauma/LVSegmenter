@@ -38,20 +38,6 @@ public class SegmentationVariant //implements Cloneable
         return res;
     }
 
-    /*public Object clone()
-    {
-        try
-        {
-            SegmentationVariant res = (SegmentationVariant)super.clone();
-            if (this.segments != null)
-                res.segments = (LinkedList<String>)this.segments.clone();
-            return res;
-        } catch (CloneNotSupportedException e)
-        {
-            throw new AssertionError(e);
-        }
-    }*/
-
     /**
      * Forms JSON list from all segments in this segmentation variant.
      */
