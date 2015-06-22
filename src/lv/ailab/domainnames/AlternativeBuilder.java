@@ -3,6 +3,7 @@ package lv.ailab.domainnames;
 import lv.ailab.segmenter.LangConst;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
+import lv.ailab.segmenter.datastruct.Lexicon.Entry;
 import lv.ailab.wordembeddings.WordEmbeddings;
 
 import java.io.*;
@@ -24,6 +25,7 @@ public class AlternativeBuilder
     public Segmenter segmenter;
     public WordEmbeddings wordembeddings_lv; // TODO - generalize
     public WordEmbeddings wordembeddings_en;
+    
     
     private WordEmbeddings wordembeddings(String language) throws Exception{
     	if (language.equalsIgnoreCase("lv")) return wordembeddings_lv;
@@ -117,7 +119,6 @@ public class AlternativeBuilder
     		return result;
     	}
     	
-    	
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
         // Filter out separators.
         segments = segments.stream().filter(a -> !LangConst.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
@@ -143,7 +144,7 @@ public class AlternativeBuilder
 
                 List<String> replacements = wordembeddings(segment.lang).similarWords(segment.lemma, 10);
                 for (String replacement : replacements) {
-                    String alternative = replacement;
+                    String alternative = alternativeForm(replacement, segment);
                     if (!prefix.trim().isEmpty())
                         alternative = prefix + "-" + alternative;
                     if (!suffix.trim().isEmpty())
@@ -160,7 +161,16 @@ public class AlternativeBuilder
         return result;
     }
 
-    /**
+    public static String alternativeForm(String replacement, Entry segment) {
+		if (!segment.lang.equalsIgnoreCase("lv")) return replacement;
+		
+		System.out.println(replacement);
+		System.out.println(segment.toString());
+		
+		return null;
+	}
+
+	/**
      * Utility method for formatting the list of alternatives as a CSV line (no
      * line endings added).
      */
