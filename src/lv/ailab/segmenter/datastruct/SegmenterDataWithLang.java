@@ -31,8 +31,11 @@ public class SegmenterDataWithLang extends SegmenterData
         if (memorizedVariants.get(from).isEmpty())
         {
             SegmentationVariantWithLang newVariant = new SegmentationVariantWithLang();
-            newVariant.addNext(word, foundWords.get(word)
-                    .stream().map(entry -> entry.lang).collect(Collectors.toSet()));
+            if (foundWords.containsKey(word))
+                newVariant.addNext(word, foundWords.get(word)
+                        .stream().map(entry -> entry.lang).collect(Collectors.toSet()));
+            else
+                newVariant.addNext(word, new HashSet<String>(){{add(LangConst.NOLANG);}});
             memorizedVariants.get(to).add(newVariant);
         }
         else for (SegmentationVariant variant: memorizedVariants.get(from))
