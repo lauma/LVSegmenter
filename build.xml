@@ -9,11 +9,16 @@
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
   <property name="lib"   location="lib"/>
+  <property name="lvtagger.dir" location="../LVTagger"/>
 
   <path id="project.class.path">
     <fileset dir="lib">
       <include name="**/*.jar"/>
     </fileset>
+  	<fileset dir="${lvtagger.dir}/dist">
+      <include name="*.jar"/>
+      <exclude name="javanlp*"/>
+  	</fileset>
   </path>
 
   <target name="init">
@@ -28,6 +33,7 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac encoding="UTF-8" includeantruntime="false" srcdir="${main.src}" destdir="${build}">
       <classpath refid="project.class.path" />
+    	
   	</javac>
   	
   </target>
@@ -38,10 +44,21 @@
     <mkdir dir="${dist}"/>
     <jar jarfile="${dist}/lvsegmenter.jar" basedir="${build}"/>
 
-  	<copy file="lv_lemmas_70p.out" todir="${dist}"/>
+  	<copy file="lv_visaslemmas.out" todir="${dist}"/>
   	<copy file="polyglot_en.out" todir="${dist}"/>
 	<copy file="wordlist-filtered-lv.txt" todir="${dist}"/>
 	<copy file="wordsEn-sil-filtered.txt" todir="${dist}"/>
+  	<copy file="${lvtagger.dir}/dist/morphology.jar" todir="${dist}"/>
+  	<copy file="${lvtagger.dir}/dist/Exceptions.txt" todir="${dist}"/>
+  	<copy todir="${dist}">
+  		<fileset dir="${lvtagger.dir}/dist" includes="Lexicon*.xml"/>
+  	</copy>
+  	<copy file="${lvtagger.dir}/dist/Statistics.xml" todir="${dist}"/>
+  	<copy file="${lvtagger.dir}/dist/TagSet.xml" todir="${dist}"/>
+  	<copy file="${lvtagger.dir}/dist/CRF.jar" todir="${dist}"/>
+  	<copy todir="${dist}/models">
+  		<fileset dir="${lvtagger.dir}/models"/>
+  	</copy>
   </target>
 	
   <target name="clean"

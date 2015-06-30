@@ -13,7 +13,7 @@ public class WordEmbeddingsTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		String EMBEDDINGS_LV_FILENAME = "lv_lemmas_70p.out";
+		String EMBEDDINGS_LV_FILENAME = "lv_visaslemmas.out";
 		wordembeddings_lv = new WordEmbeddings(EMBEDDINGS_LV_FILENAME);
 		String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
 		wordembeddings_en = new WordEmbeddings(EMBEDDINGS_EN_FILENAME);

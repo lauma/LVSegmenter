@@ -5,6 +5,13 @@ import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 import lv.ailab.segmenter.datastruct.Lexicon.Entry;
 import lv.ailab.wordembeddings.WordEmbeddings;
+import lv.lumii.expressions.Expression;
+import lv.lumii.expressions.Expression.Category;
+import lv.lumii.expressions.ExpressionWord;
+import lv.semti.morphology.analyzer.Analyzer;
+import lv.semti.morphology.analyzer.Word;
+import lv.semti.morphology.analyzer.Wordform;
+import lv.semti.morphology.attributes.AttributeNames;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,6 +19,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import edu.stanford.nlp.ie.AbstractSequenceClassifier;
+import edu.stanford.nlp.ie.ner.CMMClassifier;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.CoreAnnotations.AnswerAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.LVMorphologyAnalysis;
+import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
+import edu.stanford.nlp.sequences.LVMorphologyReaderAndWriter;
 
 /**
  * Alternative domain name creator.
@@ -25,14 +40,41 @@ public class AlternativeBuilder
     public Segmenter segmenter;
     public WordEmbeddings wordembeddings_lv; // TODO - generalize
     public WordEmbeddings wordembeddings_en;
-    
-    
+    private static transient AbstractSequenceClassifier<CoreLabel> morphoClassifier = null;
+    protected static transient Analyzer analyzer = null;
+        
     private WordEmbeddings wordembeddings(String language) throws Exception{
     	if (language.equalsIgnoreCase("lv")) return wordembeddings_lv;
     	if (language.equalsIgnoreCase("en")) return wordembeddings_en;
     	throw new Exception(String.format("Wordembeddings - bad language %s", language));
     }
 
+    // code that ensures that we have a morpholexicon and tagger available, and also can import a pre-loaded tagger to avoid duplication
+	public static void initClassifier(String model) throws Exception {
+		morphoClassifier = CMMClassifier.getClassifier(new File(model));		
+		analyzer = LVMorphologyReaderAndWriter.getAnalyzer(); // Assumption - that the morphology model actually loads the LVMorphologyReaderAndWriter data, so it should be filled.
+	}
+	
+	public static void setClassifier(AbstractSequenceClassifier<CoreLabel> preloadedClassifier) {
+		morphoClassifier = preloadedClassifier;
+		analyzer = LVMorphologyReaderAndWriter.getAnalyzer(); // Assumption - that the morphology model actually loads the LVMorphologyReaderAndWriter data, so it should be filled.
+	}
+	
+	public static void initClassifier() throws Exception {
+		setClassifier(Expression.morphoClassifier);
+	}
+	
+	public static Analyzer getAnalyzer() throws Exception {
+		if (analyzer == null) initClassifier();
+		return analyzer;
+	}
+	
+	public static AbstractSequenceClassifier<CoreLabel> getClassifier() throws Exception {
+		if (morphoClassifier == null) initClassifier();
+		return morphoClassifier;
+	}
+    
+    
     /**
      * @param lexiconFiles      array of tuples - first element is file path,
      *                          second element is language stub
@@ -122,7 +164,11 @@ public class AlternativeBuilder
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
         // Filter out separators.
         segments = segments.stream().filter(a -> !LangConst.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
-
+        
+        // form a sentence and tag it
+        String sentence = segments.stream().map(a -> a.originalForm).collect(Collectors.joining(" "));
+        Expression expression = new Expression(sentence, "other", true, false);
+        
         if (segments.size() == 1)
         {
             // Option 1 - replace the whole name with possible alternatives
@@ -141,10 +187,15 @@ public class AlternativeBuilder
             	
                 String prefix = segments.stream().limit(i).map(a -> a.originalForm).collect(Collectors.joining("-"));
                 String suffix = segments.stream().skip(i+1).map(a -> a.originalForm).collect(Collectors.joining("-"));
+                
+                String lemma = segment.lemma;
+                if (segment.lang.equalsIgnoreCase("lv")) lemma = lemma.toLowerCase();
 
-                List<String> replacements = wordembeddings(segment.lang).similarWords(segment.lemma, 10);
+                List<String> replacements = wordembeddings(segment.lang).similarWords(lemma, 10);
                 for (String replacement : replacements) {
-                    String alternative = alternativeForm(replacement, segment);
+                    String alternative = alternativeForm(replacement, segment, expression.expWords.get(i));
+                    if (alternative == null) continue;
+                    
                     if (!prefix.trim().isEmpty())
                         alternative = prefix + "-" + alternative;
                     if (!suffix.trim().isEmpty())
@@ -161,13 +212,31 @@ public class AlternativeBuilder
         return result;
     }
 
-    public static String alternativeForm(String replacement, Entry segment) {
+    public static String alternativeForm(String replacement, Entry segment, ExpressionWord expressionWord) throws Exception {
 		if (!segment.lang.equalsIgnoreCase("lv")) return replacement;
 		
-		System.out.println(replacement);
-		System.out.println(segment.toString());
+		Wordform wf = getAnalyzer().analyzeLemma(replacement).getBestWordform();
+		if (wf == null) {
+			System.err.printf("Nesanāca pamatforma vārdam %s\n", replacement);
+			wf = getAnalyzer().analyze(replacement).getBestWordform();
+		}
+		if (wf == null) {
+			System.err.printf("Nu %s laikam vispār nav vārds\n", replacement);
+			return null;
+		}
 		
-		return null;
+		if (expressionWord.correctWordform.isMatchingStrong(AttributeNames.i_PartOfSpeech, AttributeNames.v_Noun) &&
+			!wf.isMatchingStrong(AttributeNames.i_PartOfSpeech, AttributeNames.v_Noun)) {
+			System.err.printf("%s nav lietvārds tā kā %s - izlaižam!\n", replacement, segment.originalForm);
+			return null;
+		}		
+		
+		String result = Expression.inflectWord(wf, expressionWord.correctWordform.getValue(AttributeNames.i_Case), expressionWord.correctWordform, Category.other, true);
+																													// FIXME - te padod šo te vārdu f-jai, kas gaida frāzes pēdējo vārdu; teorētiski neko šai gadījumā nemaina bet varbūt ir slikti
+		System.out.printf("Lokām %s kā %s / %s - sanāca %s\n", replacement, segment.originalForm, expressionWord.correctWordform.getTag(), result);
+		System.out.flush();
+		
+		return result.trim(); // FIXME - inflectWord pieliek lieku atstarpi beigās, būtu drīzāk tur jālabo
 	}
 
 	/**

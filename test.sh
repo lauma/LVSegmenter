@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/bin/java -Xmx4g -Dfile.encoding=UTF-8 -classpath bin:lib/*:lib/commons-collections4-4.0/commons-collections4-4.0.jar:lib/commons-lang3-3.4/commons-lang3-3.4.jar lv.ailab.domainnames.AlternativeBuilder names-cleaned.txt names-alternatives.txt lv_lemmas_70p.out polyglot_en.out lv=wordlist-filtered-lv.txt en=wordsEn-sil-filtered.txt
+/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/bin/java -Xmx6g -Dfile.encoding=UTF-8 -classpath bin:lib/*:lib/commons-collections4-4.0/commons-collections4-4.0.jar:lib/commons-lang3-3.4/commons-lang3-3.4.jar lv.ailab.domainnames.AlternativeBuilder names-cleaned.txt names-alternatives.txt lv_lemmas_70p.out polyglot_en.out lv=wordlist-filtered-lv.txt en=wordsEn-sil-filtered.txt
 
 
 

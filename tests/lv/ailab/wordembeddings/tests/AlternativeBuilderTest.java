@@ -16,7 +16,7 @@ public class AlternativeBuilderTest {
 	public static void setUpBeforeClass() throws Exception {
 		String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
 	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
-	    String EMBEDDINGS_LV_FILENAME = "lv_lemmas_70p.out";
+	    String EMBEDDINGS_LV_FILENAME = "lv_visaslemmas.out";
 	    String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
 	    String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
 	    alternativebuilder = new AlternativeBuilder(
@@ -27,7 +27,7 @@ public class AlternativeBuilderTest {
 	public void normalTest() throws Exception {
 		List<String> alternatives = alternativebuilder.buildAlternatives("saulesbaterijas");
 		System.out.print(AlternativeBuilder.resultToJson(alternatives));
-		assertTrue(alternatives.contains("svelmes-baterijas"));	
+		assertTrue(alternatives.contains("mēness-baterijas"));	
 	}
 
 }

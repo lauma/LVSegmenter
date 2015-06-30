@@ -18,7 +18,7 @@ public class DomainNamesTest {
 	public static void setUpBeforeClass() throws Exception {
 		String WORDLIST_FILE_LV = "wordlist-filtered-lv.txt";
 	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
-	    String EMBEDDINGS_LV_FILENAME = "lv_lemmas_70p.out";
+	    String EMBEDDINGS_LV_FILENAME = "lv_visaslemmas.out";
 	    String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
 	    String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
 	    alternativebuilder = new AlternativeBuilder(
@@ -28,12 +28,14 @@ public class DomainNamesTest {
 	@Test
 	public void testEnglish() throws Exception {
 		List<String> alternatives = alternativebuilder.buildAlternatives("suncity");
-		System.out.print(alternativebuilder.resultToJson(alternatives));
+		System.out.print(AlternativeBuilder.resultToJson(alternatives));
 		assertTrue(alternatives.contains("moon-city"));	
 	}
 	
 	@Test
 	public void testNumbers() throws Exception {
-		assertFalse(alternativebuilder.buildAlternatives("licis-93").contains("licis-72"));	
+		List<String> alternatives = alternativebuilder.buildAlternatives("licis-93");
+		System.out.print(AlternativeBuilder.resultToJson(alternatives));
+		assertFalse(alternatives.contains("licis-72"));	
 	}
 }

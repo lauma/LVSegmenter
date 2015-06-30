@@ -42,7 +42,7 @@ public class Lexicon
             {
                 String form = parts[0];
                 String lemma = parts.length > 1 ? parts[1] : parts[0];
-                addWord(form, lemma, lang);
+                addWord(form.toLowerCase(), lemma.toLowerCase(), lang); // FIXME - bija slikts efekts no personvārdiem, varbūt to toLowercase nevajag.
             }
             if (count % 10000 == 0) System.err.print(count + " loaded.\r");
             line = in.readLine();

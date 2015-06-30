@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="lib/org.json.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LVTagger"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/morphology"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

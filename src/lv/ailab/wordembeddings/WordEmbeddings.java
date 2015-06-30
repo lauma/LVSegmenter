@@ -21,7 +21,7 @@ public class WordEmbeddings {
 	}
 	
 	public WordEmbeddings(String filename) throws Exception {
-		System.err.println("Loading word embeddings");
+		System.err.println(String.format("Loading word embeddings from %s", filename));
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(new FileInputStream(filename), "UTF-8"));
         String line = in.readLine();
