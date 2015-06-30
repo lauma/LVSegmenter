@@ -4,12 +4,12 @@ import lv.ailab.segmenter.LangConst;
 import lv.ailab.segmenter.Segmenter;
 import lv.ailab.segmenter.datastruct.Lexicon;
 import lv.ailab.segmenter.datastruct.Lexicon.Entry;
+import lv.ailab.wordembeddings.Synonyms;
 import lv.ailab.wordembeddings.WordEmbeddings;
 import lv.lumii.expressions.Expression;
 import lv.lumii.expressions.Expression.Category;
 import lv.lumii.expressions.ExpressionWord;
 import lv.semti.morphology.analyzer.Analyzer;
-import lv.semti.morphology.analyzer.Word;
 import lv.semti.morphology.analyzer.Wordform;
 import lv.semti.morphology.attributes.AttributeNames;
 
@@ -23,9 +23,6 @@ import java.util.stream.Collectors;
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.ner.CMMClassifier;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.CoreAnnotations.AnswerAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.LVMorphologyAnalysis;
-import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
 import edu.stanford.nlp.sequences.LVMorphologyReaderAndWriter;
 
 /**
@@ -42,6 +39,7 @@ public class AlternativeBuilder
     public WordEmbeddings wordembeddings_en;
     private static transient AbstractSequenceClassifier<CoreLabel> morphoClassifier = null;
     protected static transient Analyzer analyzer = null;
+    private Synonyms synonyms;
         
     private WordEmbeddings wordembeddings(String language) throws Exception{
     	if (language.equalsIgnoreCase("lv")) return wordembeddings_lv;
@@ -86,7 +84,7 @@ public class AlternativeBuilder
      */
     public  AlternativeBuilder(
             String[][] lexiconFiles, boolean sortByLangChanges, boolean allowNolang,
-            String embeddingsFileLV, String embeddingsFileEN )
+            String embeddingsFileLV, String embeddingsFileEN, String synonymsFile )
     throws Exception
     {
         lexicon = new Lexicon();
@@ -101,6 +99,8 @@ public class AlternativeBuilder
         wordembeddings_lv.addToLexicon(lexicon, "lv");
         wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
         wordembeddings_en.addToLexicon(lexicon, "en");
+		synonyms = new Synonyms(synonymsFile);
+		synonyms.addToLexicon(lexicon, "lv");
     }
 
     /**
@@ -176,6 +176,8 @@ public class AlternativeBuilder
         	// Non-language segments are kept fixed
         	if (segment.lang.equalsIgnoreCase("lv") || segment.lang.equalsIgnoreCase("en"))
         		result.addAll(wordembeddings(segment.lang).similarWords(segment.lemma, 10));
+        	if (segment.lang.equalsIgnoreCase("lv"))
+        		result.addAll(synonyms.similarWords(segment.lemma));
         } else
         {
             // Option 2 - keep all other segments fixed, replace a single word with alternatives
@@ -192,6 +194,7 @@ public class AlternativeBuilder
                 if (segment.lang.equalsIgnoreCase("lv")) lemma = lemma.toLowerCase();
 
                 List<String> replacements = wordembeddings(segment.lang).similarWords(lemma, 10);
+                if (segment.lang.equalsIgnoreCase("lv")) replacements.addAll(synonyms.similarWords(lemma));
                 for (String replacement : replacements) {
                     String alternative = alternativeForm(replacement, segment, expression.expWords.get(i));
                     if (alternative == null) continue;
@@ -233,8 +236,8 @@ public class AlternativeBuilder
 		
 		String result = Expression.inflectWord(wf, expressionWord.correctWordform.getValue(AttributeNames.i_Case), expressionWord.correctWordform, Category.other, true);
 																													// FIXME - te padod šo te vārdu f-jai, kas gaida frāzes pēdējo vārdu; teorētiski neko šai gadījumā nemaina bet varbūt ir slikti
-		System.out.printf("Lokām %s kā %s / %s - sanāca %s\n", replacement, segment.originalForm, expressionWord.correctWordform.getTag(), result);
-		System.out.flush();
+//		System.out.printf("Lokām %s kā %s / %s - sanāca %s\n", replacement, segment.originalForm, expressionWord.correctWordform.getTag(), result);
+//		System.out.flush();
 		
 		return result.trim(); // FIXME - inflectWord pieliek lieku atstarpi beigās, būtu drīzāk tur jālabo
 	}

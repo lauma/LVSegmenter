@@ -20,9 +20,10 @@ public class DomainNamesTest {
 	    String WORDLIST_FILE_EN = "wordsEn-sil-filtered.txt";
 	    String EMBEDDINGS_LV_FILENAME = "lv_visaslemmas.out";
 	    String EMBEDDINGS_EN_FILENAME = "polyglot_en.out";
+	    String SYNONYMS_FILENAME = "sinonimi.txt";
 	    String[][] lexiconFiles = {{WORDLIST_FILE_LV, "lv"}, {WORDLIST_FILE_EN, "en"}};
 	    alternativebuilder = new AlternativeBuilder(
-				lexiconFiles, true, true, EMBEDDINGS_LV_FILENAME, EMBEDDINGS_EN_FILENAME);
+				lexiconFiles, true, true, EMBEDDINGS_LV_FILENAME, EMBEDDINGS_EN_FILENAME, SYNONYMS_FILENAME);
 	}
 
 	@Test
