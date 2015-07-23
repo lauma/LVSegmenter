@@ -1,6 +1,7 @@
 package lv.ailab.segmenter.datastruct;
 
 import lv.ailab.segmenter.LangConst;
+import lv.ailab.segmenter.datastruct.Lexicon.Entry;
 
 import java.util.*;
 
@@ -42,7 +43,13 @@ public class SegmentationResultWithLang extends SegmentationResult
             {
                 String segment = primRes.segments.get(i);
                 String lang = primResLang.langs.get(i);
-                Optional<Lexicon.Entry> matched = foundWords.get(segment).stream()
+                List<Entry> entries = foundWords.get(segment);
+                if (entries == null) {
+                	// nolang visticamāk
+                	res.add(new Entry(segment, segment, lang));
+                	continue;
+                }
+                Optional<Lexicon.Entry> matched = entries.stream()
                         .filter(entry -> entry.lang.equals(lang)).findFirst();
                 if (matched.isPresent())
                     res.add(matched.get());

@@ -48,6 +48,8 @@
   	<copy file="polyglot_en.out" todir="${dist}"/>
 	<copy file="wordlist-filtered-lv.txt" todir="${dist}"/>
 	<copy file="wordsEn-sil-filtered.txt" todir="${dist}"/>
+  	<copy file="sinonimi.txt" todir="${dist}"/>
+  	<copy file="blacklist.txt" todir="${dist}"/>
   	<copy file="${lvtagger.dir}/dist/morphology.jar" todir="${dist}"/>
   	<copy file="${lvtagger.dir}/dist/Exceptions.txt" todir="${dist}"/>
   	<copy todir="${dist}">

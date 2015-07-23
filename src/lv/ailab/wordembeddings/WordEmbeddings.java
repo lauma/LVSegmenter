@@ -48,7 +48,7 @@ public class WordEmbeddings {
             String word = parts[0];
             
             // don't include embeddings for numbers etc
-            if (word.matches(".*[0-9].*")) 
+            if (!word.matches("(\\p{L}\\p{M}*)+")) 
             	continue;
             
             double[] vector = new double[vector_size];

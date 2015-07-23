@@ -97,5 +97,4 @@ public class SegmenterTest
         assertEquals("[\"si\", \"zeme\"]", res.segmentations.get(1).toJSONSegmentList());
     }
 
-
 }

@@ -16,8 +16,12 @@ import lv.semti.morphology.attributes.AttributeNames;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
@@ -40,6 +44,7 @@ public class AlternativeBuilder
     private static transient AbstractSequenceClassifier<CoreLabel> morphoClassifier = null;
     protected static transient Analyzer analyzer = null;
     private Synonyms synonyms;
+    private Set<String> blacklist = new HashSet<String>();
         
     private WordEmbeddings wordembeddings(String language) throws Exception{
     	if (language.equalsIgnoreCase("lv")) return wordembeddings_lv;
@@ -84,7 +89,7 @@ public class AlternativeBuilder
      */
     public  AlternativeBuilder(
             String[][] lexiconFiles, boolean sortByLangChanges, boolean allowNolang,
-            String embeddingsFileLV, String embeddingsFileEN, String synonymsFile )
+            String embeddingsFileLV, String embeddingsFileEN, String synonymsFile, String blacklistFile )
     throws Exception
     {
         lexicon = new Lexicon();
@@ -100,10 +105,23 @@ public class AlternativeBuilder
         wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
         wordembeddings_en.addToLexicon(lexicon, "en");
 		synonyms = new Synonyms(synonymsFile);
-		synonyms.addToLexicon(lexicon, "lv");
+		synonyms.addToLexicon(lexicon, "lv");		
+		loadBlacklist(blacklistFile);
     }
 
-    /**
+    private void loadBlacklist(String filename) throws IOException {
+		System.err.println(String.format("Loading blacklist from %s", filename));
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+        String line = in.readLine();
+        while (line != null) {
+        	blacklist.add(line);
+            line = in.readLine();
+        }
+        in.close();
+	}
+
+	/**
      * @param sortByLangChanges flag whether segmenter will use sorting by
      *                          language changes
      * @param embeddingsFileLV  path to 1st embeddings file
@@ -114,7 +132,7 @@ public class AlternativeBuilder
      */
     public  AlternativeBuilder(
             boolean sortByLangChanges, boolean allowNolang,
-            String embeddingsFileLV, String embeddingsFileEN, String ... lexiconFiles)
+            String embeddingsFileLV, String embeddingsFileEN, String synonymsFile, String ... lexiconFiles)
             throws Exception
     {
         lexicon = new Lexicon();
@@ -129,6 +147,8 @@ public class AlternativeBuilder
         wordembeddings_lv.addToLexicon(lexicon, "lv");
         wordembeddings_en = new WordEmbeddings(embeddingsFileEN);
         wordembeddings_en.addToLexicon(lexicon, "en");
+		synonyms = new Synonyms(synonymsFile);
+		synonyms.addToLexicon(lexicon, "lv");        
     }
 
     /**
@@ -161,23 +181,21 @@ public class AlternativeBuilder
     		return result;
     	}
     	
+//        System.out.println(segmenter.segment(query).toJSON());
         List<Lexicon.Entry> segments = segmenter.segment(query).primaryResult();
         // Filter out separators.
         segments = segments.stream().filter(a -> !LangConst.SEPARATOR.equals(a.lang)).collect(Collectors.toList());
         
         // form a sentence and tag it
-        String sentence = segments.stream().map(a -> a.originalForm).collect(Collectors.joining(" "));
+        String sentence = segments.stream().map(a -> a.originalForm).collect(Collectors.joining("  ")); // two spaces to prevent joining spaced words when tokenizing 
         Expression expression = new Expression(sentence, "other", true, false);
+//        expression.describe(new PrintWriter(System.out));
         
         if (segments.size() == 1)
         {
             // Option 1 - replace the whole name with possible alternatives
         	Lexicon.Entry segment = segments.get(0);
-        	// Non-language segments are kept fixed
-        	if (segment.lang.equalsIgnoreCase("lv") || segment.lang.equalsIgnoreCase("en"))
-        		result.addAll(wordembeddings(segment.lang).similarWords(segment.lemma, 10));
-        	if (segment.lang.equalsIgnoreCase("lv"))
-        		result.addAll(synonyms.similarWords(segment.lemma));
+        	result.addAll(alternatives(segment));
         } else
         {
             // Option 2 - keep all other segments fixed, replace a single word with alternatives
@@ -190,12 +208,7 @@ public class AlternativeBuilder
                 String prefix = segments.stream().limit(i).map(a -> a.originalForm).collect(Collectors.joining("-"));
                 String suffix = segments.stream().skip(i+1).map(a -> a.originalForm).collect(Collectors.joining("-"));
                 
-                String lemma = segment.lemma;
-                if (segment.lang.equalsIgnoreCase("lv")) lemma = lemma.toLowerCase();
-
-                List<String> replacements = wordembeddings(segment.lang).similarWords(lemma, 10);
-                if (segment.lang.equalsIgnoreCase("lv")) replacements.addAll(synonyms.similarWords(lemma));
-                for (String replacement : replacements) {
+                for (String replacement : alternatives(segment)) {
                     String alternative = alternativeForm(replacement, segment, expression.expWords.get(i));
                     if (alternative == null) continue;
                     
@@ -215,7 +228,23 @@ public class AlternativeBuilder
         return result;
     }
 
-    public static String alternativeForm(String replacement, Entry segment, ExpressionWord expressionWord) throws Exception {
+    private List<String> alternatives(Entry segment) throws Exception {
+    	LinkedList<String> result = new LinkedList<String>();
+    	
+        String lemma = segment.lemma;
+        if (segment.lang.equalsIgnoreCase("lv")) lemma = lemma.toLowerCase();    	
+    	
+    	// Non-language segments are kept fixed
+    	if (segment.lang.equalsIgnoreCase("lv") || segment.lang.equalsIgnoreCase("en"))
+    		result.addAll(wordembeddings(segment.lang).similarWords(lemma, 10));
+    	if (segment.lang.equalsIgnoreCase("lv"))
+    		result.addAll(synonyms.similarWords(lemma));
+    	
+    	
+		return result.stream().filter(a -> !blacklist.contains(a)).collect(Collectors.toList());
+	}
+
+	public static String alternativeForm(String replacement, Entry segment, ExpressionWord expressionWord) throws Exception {
 		if (!segment.lang.equalsIgnoreCase("lv")) return replacement;
 		
 		Wordform wf = getAnalyzer().analyzeLemma(replacement).getBestWordform();
@@ -275,11 +304,11 @@ public class AlternativeBuilder
         {
             System.err.println("To generate alternative names for every line in a file, provide following");
             System.err.println("arguments:");
-            System.err.println("\tfile_to_process ouput_file word_embeddings_file_lv word_embeddings_file_en lang1=wordlist1 lang2=wordlist2");
+            System.err.println("\tfile_to_process ouput_file word_embeddings_file_lv word_embeddings_file_en synonyms_file lang1=wordlist1 lang2=wordlist2");
             return;
         }
         AlternativeBuilder ab = new AlternativeBuilder(
-                true, true, args[2], args[3], Arrays.copyOfRange(args, 4, args.length));
+                true, true, args[2], args[3], args[4], Arrays.copyOfRange(args, 5, args.length));
 
         System.err.println("Processing file...");
         BufferedReader in = new BufferedReader(
@@ -294,6 +323,7 @@ public class AlternativeBuilder
             count++;
             out.append("\"" + readLine + "\",");
             out.append(resultToCsv(ab.buildAlternatives(readLine)));
+            out.flush();
             if (count % 100 == 0) System.err.print(count + " processed.\r");
             readLine = in.readLine();
             if (readLine != null) out.newLine();
