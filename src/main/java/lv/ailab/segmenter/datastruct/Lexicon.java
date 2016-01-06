@@ -28,8 +28,12 @@ public class Lexicon
     {
         System.err.println("Loading wordlist...");
         langStubs.add(lang);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(wordListFile);
+        if (stream == null) {
+            stream = new FileInputStream(wordListFile);
+        }
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(new FileInputStream(wordListFile), "UTF-8"));
+                new InputStreamReader(stream, "UTF-8"));
         String line = in.readLine();
         int count = 0;
         while (line != null)

@@ -2,6 +2,7 @@ package lv.ailab.wordembeddings;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +23,12 @@ public class WordEmbeddings {
 	
 	public WordEmbeddings(String filename) throws Exception {
 		System.err.println(String.format("Loading word embeddings from %s", filename));
+		InputStream stream = getClass().getClassLoader().getResourceAsStream(filename);
+		if (stream == null) {
+			stream = new FileInputStream(filename);
+		}
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+                new InputStreamReader(stream, "UTF-8"));
         String line = in.readLine();
         String[] parts = line.split(" ");
         if (parts.length != 2) {
