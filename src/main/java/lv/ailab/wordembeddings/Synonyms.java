@@ -2,6 +2,7 @@ package lv.ailab.wordembeddings;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,8 +17,12 @@ public class Synonyms {
 	
 	public Synonyms(String filename) throws Exception {
 		System.err.println(String.format("Loading synonyms from %s", filename));
+		InputStream stream = getClass().getClassLoader().getResourceAsStream(filename);
+		if (stream == null) {
+			stream = new FileInputStream(filename);
+		}
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+                new InputStreamReader(stream, "UTF-8"));
         String line = in.readLine();
         while (line != null) {
             String[] parts = line.split("-",2);            

@@ -111,8 +111,12 @@ public class AlternativeBuilder
 
     private void loadBlacklist(String filename) throws IOException {
 		System.err.println(String.format("Loading blacklist from %s", filename));
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(filename);
+        if (stream == null) {
+            stream = new FileInputStream(filename);
+        }
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+                new InputStreamReader(stream, "UTF-8"));
         String line = in.readLine();
         while (line != null) {
         	blacklist.add(line);
