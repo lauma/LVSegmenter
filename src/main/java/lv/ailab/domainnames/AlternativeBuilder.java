@@ -249,25 +249,30 @@ public class AlternativeBuilder
 	}
 
 	public static String alternativeForm(String replacement, Entry segment, ExpressionWord expressionWord) throws Exception {
+        boolean debug = false; // FIXME - ārēji kontrolējamu šo te vajadzētu
+
 		if (!segment.lang.equalsIgnoreCase("lv")) return replacement;
 		
 		Wordform wf = getAnalyzer().analyzeLemma(replacement).getBestWordform();
 		if (wf == null) {
-			System.err.printf("Nesanāca pamatforma vārdam %s\n", replacement);
+            if (debug)
+			    System.err.printf("Nesanāca pamatforma vārdam %s\n", replacement);
 			wf = getAnalyzer().analyze(replacement).getBestWordform();
 		}
 		if (wf == null) {
-			System.err.printf("Nu %s laikam vispār nav vārds\n", replacement);
+            if (debug)
+			    System.err.printf("Nu %s laikam vispār nav vārds\n", replacement);
 			return null;
 		}
 		
 		if (expressionWord.correctWordform.isMatchingStrong(AttributeNames.i_PartOfSpeech, AttributeNames.v_Noun) &&
 			!wf.isMatchingStrong(AttributeNames.i_PartOfSpeech, AttributeNames.v_Noun)) {
-			System.err.printf("%s nav lietvārds tā kā %s - izlaižam!\n", replacement, segment.originalForm);
+            if (debug)
+			    System.err.printf("%s nav lietvārds tā kā %s - izlaižam!\n", replacement, segment.originalForm);
 			return null;
 		}		
 		
-		String result = Expression.inflectWord(wf, expressionWord.correctWordform.getValue(AttributeNames.i_Case), expressionWord.correctWordform, Category.other, true);
+		String result = Expression.inflectWord(wf, expressionWord.correctWordform.getValue(AttributeNames.i_Case), expressionWord.correctWordform, Category.other, debug);
 																													// FIXME - te padod šo te vārdu f-jai, kas gaida frāzes pēdējo vārdu; teorētiski neko šai gadījumā nemaina bet varbūt ir slikti
 //		System.out.printf("Lokām %s kā %s / %s - sanāca %s\n", replacement, segment.originalForm, expressionWord.correctWordform.getTag(), result);
 //		System.out.flush();
@@ -284,6 +289,10 @@ public class AlternativeBuilder
         return "\"" + String.join("\",\"", alternatives) + "\"";
     }
 
+    private static String toJSONString(String text) {
+        return "\"" + text.replaceAll("\"", "\\\\\"") + "\"";
+    }
+
     /**
      * Utility method for formatting the list of alternatives as a JSON array.
      */
@@ -294,7 +303,7 @@ public class AlternativeBuilder
         Iterator<String> i = alternatives.iterator();
         while (i.hasNext()) {
             String alternative = i.next();
-            sb.append(alternative);
+            sb.append(toJSONString(alternative));
             if (i.hasNext()) sb.append(", ");
         }
         sb.append("]");
